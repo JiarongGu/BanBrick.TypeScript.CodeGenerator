@@ -97,7 +97,16 @@ namespace BanBrick.TypeScript.CodeGenerator.Helpers
 
         public bool IsPurePrimitiveType(Type type)
         {
-            if (type.IsPrimitive || type == typeof(Decimal) || type == typeof(String))
+            if (type.IsPrimitive || IsSpecialPrimitiveType(type))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public bool IsSpecialPrimitiveType(Type type)
+        {
+            if (type == typeof(Decimal) || type == typeof(String) || type == typeof(DateTime))
             {
                 return true;
             }
@@ -193,7 +202,7 @@ namespace BanBrick.TypeScript.CodeGenerator.Helpers
             if (IsNumericType(primitiveType))
                 return "Number";
 
-            if (primitiveType == typeof(string))
+            if (primitiveType == typeof(string) || primitiveType == typeof(DateTime))
                 return "String";
 
             if (primitiveType == typeof(bool))

@@ -3,6 +3,7 @@ using BanBrick.TypeScript.CodeGenerator.Helpers;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Reflection;
 using System.Text;
 
@@ -76,6 +77,9 @@ namespace BanBrick.TypeScript.CodeGenerator.Generators
 
             if (type == typeof(string))
                 return GetStringValueCode((string)value);
+
+            if (type == typeof(DateTime) && ((DateTime)value).Ticks > 0 )
+                return GetStringValueCode(((DateTime)value).ToUniversalTime().ToString("o", CultureInfo.InvariantCulture));
 
             return null;
         }

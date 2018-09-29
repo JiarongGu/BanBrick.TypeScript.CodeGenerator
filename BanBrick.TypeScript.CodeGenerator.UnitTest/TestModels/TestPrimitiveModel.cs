@@ -16,5 +16,7 @@ namespace BanBrick.TypeScript.CodeGenerator.UnitTest.TestModels
         public int? Value8 { get; set; }
         public decimal? Value9 { get; set; }
         public int? Value10 { get; set; }
+        public DateTime Value11 { get; set; }
+        public DateTime? Value12 { get; set; }
     }
 }
