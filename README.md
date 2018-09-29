@@ -3,7 +3,10 @@ C# to TypeScript Code Generator Libarary for WebApi
 
 ## Getting Started
 
-Download and include this liabray into your project.
+https://www.nuget.org/packages/BanBrick.TypeScript.CodeGenerator/
+
+PM > Install-Package BanBrick.TypeScript.CodeGenerator -Version 1.0.0
+
 
 ### Prerequisites
 
