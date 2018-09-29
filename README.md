@@ -26,4 +26,4 @@ var code = codeGenerator.GenerateTypeScript(types);
 
 
 ## Code Generation Workflow
-![alt text](/master/Code%20Generation%20Work%20Flow.png)
+![alt text](/Code%20Generation%20Work%20Flow.png)
