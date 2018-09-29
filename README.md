@@ -26,4 +26,4 @@ var code = codeGenerator.GenerateTypeScript(types);
 
 
 ## Code Generation Workflow
-![alt text](https://raw.githubusercontent.com/JiarongGu/BanBrick.TypeScript.CodeGenerator/master/Code%20Generation%20Work%20Flow.png)
+![alt text](/Code Generation Work Flow.png)
