@@ -23,8 +23,8 @@ PM > Install-Package BanBrick.TypeScript.CodeGenerator -Version 1.0.0
 using BanBrick.TypeScript.CodeGenerator;
 
 var types = new List<Type>() { type1, type2, type3, ...};
-var codeGenerator = new CodeGenerator();
-var code = codeGenerator.GenerateTypeScript(types);
+var codeProcesser = new TypeScriptProcesser();
+var code = codeProcesser.GenerateTypeScript(types);
 ```
 
 
