@@ -17,7 +17,9 @@ Download and include this liabray into your project.
 #### Generate typescript code from list of types.
 
 ```
+using BanBrick.TypeScript.CodeGenerator;
+
 var types = new List<Type>() { type1, type2, type3, ...};
-var codeGenerator = new CodeGenerator()
+var codeGenerator = new CodeGenerator();
 var code = codeGenerator.GenerateTypeScript(types);
 ```
