@@ -200,13 +200,13 @@ namespace BanBrick.TypeScript.CodeGenerator.Helpers
             }
 
             if (IsNumericType(primitiveType))
-                return "Number";
+                return "number";
 
             if (primitiveType == typeof(string) || primitiveType == typeof(DateTime))
-                return "String";
+                return "string";
 
             if (primitiveType == typeof(bool))
-                return "Boolean";
+                return "boolean";
 
             return "any";
         }
