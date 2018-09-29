@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Reflection.TypeExtensions" Version="4.5.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BanBrick.TypeScript.CodeGenerator.Annotations\BanBrick.TypeScript.CodeGenerator.Annotations.csproj" />
+  </ItemGroup>
+
+</Project>
