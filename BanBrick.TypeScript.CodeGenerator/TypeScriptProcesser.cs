@@ -7,14 +7,14 @@ using System.Text;
 
 namespace BanBrick.TypeScript.CodeGenerator
 {
-    public class CodeGenerator
+    public class TypeScriptProcesser
     {
         private readonly ManagedTypeGenerator _managedTypeConvertor;
         private readonly ObjectCodeGenerator _objectGenerator;
         private readonly EnumCodeGenerator _enumGenerator;
 
         private readonly AssemblyHelper _assemblyHelper;
-        public CodeGenerator()
+        public TypeScriptProcesser()
         {
             _managedTypeConvertor = new ManagedTypeGenerator();
             _objectGenerator = new ObjectCodeGenerator();
