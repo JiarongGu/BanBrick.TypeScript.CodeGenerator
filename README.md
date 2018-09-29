@@ -1,5 +1,5 @@
 # BanBrick.TypeScript.CodeGenerator
-C# to TypeScript Code Generator Libarary for WebApi
+C# to TypeScript Code Generator Libarary for WebApi Request/Response Model
 
 ## Getting Started
 
