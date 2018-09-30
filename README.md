@@ -27,6 +27,13 @@ var codeProcesser = new TypeScriptProcesser();
 var code = codeProcesser.GenerateTypeScript(types);
 ```
 
+## Roadmap
+
+- [ ] Auto-Indenting to multiple-layered tree structure values
+- [ ] Support for Generictypes generation
+- [ ] Support for Interface generation
+
+
 
 ## Code Generation Workflow
 ![alt text](/Code%20Generation%20Work%20Flow.png)
