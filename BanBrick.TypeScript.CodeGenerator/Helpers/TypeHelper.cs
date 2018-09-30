@@ -216,9 +216,8 @@ namespace BanBrick.TypeScript.CodeGenerator.Helpers
             var keyValuetypes = type.GenericTypeArguments;
             var keyType = keyValuetypes[0];
             var valueType = keyValuetypes[1];
-            var nullableCode = IsNullableType(valueType) ? "?" : "";
 
-            return $"{{ [key: {GetTypeScriptName(keyType)}] : {GetTypeScriptName(valueType)}{nullableCode} }}";
+            return $"{{ [key: {GetTypeScriptName(keyType)}] : {GetTypeScriptName(valueType)} }}";
         }
 
         public string GetCollectionTypeScriptName(Type type)
