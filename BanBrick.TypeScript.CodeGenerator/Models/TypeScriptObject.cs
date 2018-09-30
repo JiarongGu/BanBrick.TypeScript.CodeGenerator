@@ -5,7 +5,7 @@ using System.Text;
 
 namespace BanBrick.TypeScript.CodeGenerator.Models
 {
-    public class TypeScriptObject
+    internal class TypeScriptObject
     {
         public Type Type { get; set; }
 

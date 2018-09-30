@@ -7,6 +7,7 @@ namespace BanBrick.TypeScript.CodeGenerator.Annotations
     [AttributeUsage(AttributeTargets.Class| AttributeTargets.Enum, AllowMultiple = false)]
     public class TypeScriptObjectAttribute: Attribute
     {
+        public TypeScriptObjectAttribute() { }
         public TypeScriptObjectAttribute(string name) => (Name) = name;
 
         public string Name { get; set; }

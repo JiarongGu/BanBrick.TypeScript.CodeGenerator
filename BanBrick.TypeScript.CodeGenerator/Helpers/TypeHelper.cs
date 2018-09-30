@@ -185,7 +185,7 @@ namespace BanBrick.TypeScript.CodeGenerator.Helpers
             var tsObjectInfo = (TypeScriptObjectAttribute)type.GetTypeInfo().GetCustomAttributes()
                 .FirstOrDefault(x => x.GetType().Name == nameof(TypeScriptObjectAttribute));
 
-            if (tsObjectInfo != null)
+            if (tsObjectInfo != null && !string.IsNullOrEmpty(tsObjectInfo.Name))
                 name = tsObjectInfo.Name;
 
             return name;
