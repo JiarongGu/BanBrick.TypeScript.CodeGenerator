@@ -29,6 +29,7 @@ var code = codeProcesser.GenerateTypeScript(types);
 
 ## Roadmap
 
+- [ ] Generate const value output instead of class
 - [ ] Auto-Indenting to multiple-layered tree structure values
 - [ ] Support for Generictypes generation
 - [ ] Support for Interface generation
