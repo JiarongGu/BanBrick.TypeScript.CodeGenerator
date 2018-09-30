@@ -34,5 +34,6 @@ var code = codeProcesser.GenerateTypeScript(types);
 - [ ] Support for Interface generation
 
 
+
 ## Code Generation Workflow
 ![alt text](/Code%20Generation%20Work%20Flow.png)
