@@ -29,9 +29,9 @@ var code = codeProcesser.GenerateTypeScript(types);
 
 ## Roadmap
 
-#### Auto-Indenting to multiple-layered tree structure values
-#### Support for Generictypes generation
-#### Support for Interface generation
+- [ ] Auto-Indenting to multiple-layered tree structure values
+- [ ] Support for Generictypes generation
+- [ ] Support for Interface generation
 
 
 ## Code Generation Workflow
