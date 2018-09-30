@@ -26,7 +26,7 @@ namespace BanBrick.TypeScript.CodeGenerator.Helpers
 
             if (type.IsGenericType 
                 && type.GetGenericArguments().Count() == 2
-                && type.GetInterfaces().Any(x => x.GetGenericTypeDefinition() == typeof(IDictionary<,>)))
+                && type.GetInterfaces().Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IDictionary<,>)))
                 return true;
 
             return false;

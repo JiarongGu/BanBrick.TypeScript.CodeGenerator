@@ -2,13 +2,13 @@
 <package >
   <metadata>
     <id>BanBrick.TypeScript.CodeGenerator</id>
-    <version>1.0.8</version>
+    <version>1.0.9</version>
     <authors>jiarong.gu</authors>
     <owners>jiarong.gu</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>C# to TypeScript Code Generator Libarary for .Net Core Web APIs Request/Response models</description>
     <releaseNotes>
-      added name empty handling for annotation
+      fix generic check before get generic definition
     </releaseNotes>
     <copyright>Copyright 2018</copyright>
     <projectUrl>https://github.com/JiarongGu/BanBrick.TypeScript.CodeGenerator</projectUrl>
