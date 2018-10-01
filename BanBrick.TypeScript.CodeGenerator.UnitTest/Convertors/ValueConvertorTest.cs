@@ -1,20 +1,19 @@
-﻿using BanBrick.TypeScript.CodeGenerator.Generators;
-using BanBrick.TypeScript.CodeGenerator.Helpers;
+﻿using BanBrick.TypeScript.CodeGenerator.Convertors;
 using BanBrick.TypeScript.CodeGenerator.UnitTest.TestModels;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using Xunit;
 
-namespace BanBrick.TypeScript.CodeGenerator.UnitTest.Generators
+namespace BanBrick.TypeScript.CodeGenerator.UnitTest.Convertors
 {
-    public class ValueCodeGeneratorTest
+    public class ValueConvertorTest
     {
-        private readonly ValueCodeGenerator _generator;
+        private readonly ValueConvertor _convertor;
 
-        public ValueCodeGeneratorTest()
+        public ValueConvertorTest()
         {
-            _generator = new ValueCodeGenerator();
+            _convertor = new ValueConvertor();
         }
 
         [Fact]
@@ -33,34 +32,34 @@ namespace BanBrick.TypeScript.CodeGenerator.UnitTest.Generators
                 Value10  = null
             };
             
-            var value1 = _generator.GetPrimitiveValueCode(instance.Value1);
+            var value1 = _convertor.GetPrimitiveValueCode(instance.Value1);
             Assert.Equal("'Test value'", value1);
 
-            var value2 = _generator.GetPrimitiveValueCode(instance.Value2);
+            var value2 = _convertor.GetPrimitiveValueCode(instance.Value2);
             Assert.Equal("10", value2);
 
-            var value3 = _generator.GetPrimitiveValueCode(instance.Value3);
+            var value3 = _convertor.GetPrimitiveValueCode(instance.Value3);
             Assert.Equal("20", value3);
 
-            var value4 = _generator.GetPrimitiveValueCode(instance.Value4);
+            var value4 = _convertor.GetPrimitiveValueCode(instance.Value4);
             Assert.Equal("30", value4);
 
-            var value5 = _generator.GetPrimitiveValueCode(instance.Value5);
+            var value5 = _convertor.GetPrimitiveValueCode(instance.Value5);
             Assert.Equal("40", value5);
 
-            var value6 = _generator.GetPrimitiveValueCode(instance.Value6);
+            var value6 = _convertor.GetPrimitiveValueCode(instance.Value6);
             Assert.Equal("50", value6);
 
-            var value7 = _generator.GetPrimitiveValueCode(instance.Value7);
+            var value7 = _convertor.GetPrimitiveValueCode(instance.Value7);
             Assert.Equal("true", value7);
 
-            var value8 = _generator.GetPrimitiveValueCode(instance.Value8);
+            var value8 = _convertor.GetPrimitiveValueCode(instance.Value8);
             Assert.Equal("null", value8);
 
-            var value9 = _generator.GetPrimitiveValueCode(instance.Value9);
+            var value9 = _convertor.GetPrimitiveValueCode(instance.Value9);
             Assert.Equal("70", value9);
 
-            var value10 = _generator.GetPrimitiveValueCode(instance.Value10);
+            var value10 = _convertor.GetPrimitiveValueCode(instance.Value10);
             Assert.Equal("null", value10);
         }
         
@@ -69,7 +68,7 @@ namespace BanBrick.TypeScript.CodeGenerator.UnitTest.Generators
         public void GenerateValueCode_ShouldReturnNumberArrayCode()
         {
             var numberList = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-            var numberListCode = _generator.GenerateValueCode(numberList.GetType(), numberList);
+            var numberListCode = _convertor.GenerateValueCode(numberList.GetType(), numberList);
 
             Assert.Equal("[ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ]", numberListCode);
         }
@@ -84,7 +83,7 @@ namespace BanBrick.TypeScript.CodeGenerator.UnitTest.Generators
                 { 4, "4" },
                 { 5, "5" },
             };
-            var numberListCode = _generator.GenerateValueCode(numberDisctionary.GetType(), numberDisctionary);
+            var numberListCode = _convertor.GenerateValueCode(numberDisctionary.GetType(), numberDisctionary);
             Assert.Equal("{ 1: '1', 2: '2', 3: '3', 4: '4', 5: '5' }", numberListCode);
         }
     }

@@ -1,5 +1,5 @@
-﻿using BanBrick.TypeScript.CodeGenerator.Helpers;
-using BanBrick.TypeScript.CodeGenerator.Models;
+﻿using BanBrick.TypeScript.CodeGenerator.Convertors;
+using BanBrick.TypeScript.CodeGenerator.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,11 +10,13 @@ namespace BanBrick.TypeScript.CodeGenerator.Generators
     public class EnumCodeGenerator
     {
         private readonly TypeHelper _typeHelper;
-        private readonly ValueCodeGenerator _valueCodeGenerator;
+        private readonly ValueConvertor _valueConvertor;
+        private readonly NameConvertor _nameConvertor;
 
         public EnumCodeGenerator() {
             _typeHelper = new TypeHelper();
-            _valueCodeGenerator = new ValueCodeGenerator();
+            _valueConvertor = new ValueConvertor();
+            _nameConvertor = new NameConvertor();
         }
 
         public string Generate(Type enumType)
@@ -26,7 +28,7 @@ namespace BanBrick.TypeScript.CodeGenerator.Generators
 
             var names = Enum.GetNames(enumType);
             var values = Enum.GetValues(enumType).Cast<int>().ToArray();
-            var enumName = _typeHelper.GetTypeScriptName(enumType);
+            var enumName = _nameConvertor.GetTypeScriptName(enumType);
 
             // add typescript enum
             stringBuilder.AppendLine($"export enum {enumName} {{");
@@ -40,7 +42,7 @@ namespace BanBrick.TypeScript.CodeGenerator.Generators
             stringBuilder.AppendLine($"export const {enumName}Array = [");
 
             for (int i = 0; i < names.Length; i++)
-                stringBuilder.AppendLine($"  {_valueCodeGenerator.GetStringValueCode(names[i])},");
+                stringBuilder.AppendLine($"  {_valueConvertor.GetStringValueCode(names[i])},");
             stringBuilder.AppendLine("];");
 
             return stringBuilder.ToString(); ;

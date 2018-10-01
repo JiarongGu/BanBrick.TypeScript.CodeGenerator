@@ -7,19 +7,21 @@ using System.Globalization;
 using System.Reflection;
 using System.Text;
 
-namespace BanBrick.TypeScript.CodeGenerator.Generators
+namespace BanBrick.TypeScript.CodeGenerator.Convertors
 {
-    public class ValueCodeGenerator
+    public class ValueConvertor
     {
         private readonly TypeHelper _typeHelper;
         private readonly PropertyHelper _propertyHelper;
         private readonly StringHelper _stringHelper;
+        private readonly NameConvertor _nameConvertor;
 
-        public ValueCodeGenerator()
+        public ValueConvertor()
         {
             _typeHelper = new TypeHelper();
             _propertyHelper = new PropertyHelper();
             _stringHelper = new StringHelper();
+            _nameConvertor = new NameConvertor();
         }
 
         /// <summary>
@@ -42,7 +44,7 @@ namespace BanBrick.TypeScript.CodeGenerator.Generators
 
             if (typeCategory == TypeCategory.Enum)
             {
-                return GetEnumValueCode(_typeHelper.GetTypeScriptName(type), value);
+                return GetEnumValueCode(_nameConvertor.GetTypeScriptName(type), value);
             }
 
             if (typeCategory == TypeCategory.Collection)
@@ -135,7 +137,7 @@ namespace BanBrick.TypeScript.CodeGenerator.Generators
                     continue;
 
                 var propertyType = property.PropertyType;
-                var propertyName = _typeHelper.GetTypeScriptName(propertyType);
+                var propertyName = _nameConvertor.GetTypeScriptName(propertyType);
                 var valueCode = GenerateValueCode(propertyType, property.GetValue(value));
 
                 objectPropertiesCode.Add($"{_stringHelper.ToCamelCase(property.Name)}: {valueCode}");

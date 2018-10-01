@@ -1,4 +1,4 @@
-﻿using BanBrick.TypeScript.CodeGenerator.Enums;
+﻿using BanBrick.TypeScript.CodeGenerator.Convertors;
 using BanBrick.TypeScript.CodeGenerator.Helpers;
 using System;
 using System.Collections;
@@ -12,16 +12,20 @@ namespace BanBrick.TypeScript.CodeGenerator.Generators
     public class ObjectCodeGenerator
     {
         private readonly TypeHelper _typeHelper;
-        private readonly PropertyHelper _propertyHelper;
-        private readonly ValueCodeGenerator _valueCodeGenerator;
         private readonly StringHelper _stringHelper;
+        private readonly PropertyHelper _propertyHelper;
+
+        private readonly ValueConvertor _valueConvertor;
+        private readonly NameConvertor _nameConvertor;
 
         public ObjectCodeGenerator()
         {
             _typeHelper = new TypeHelper();
-            _propertyHelper = new PropertyHelper();
-            _valueCodeGenerator = new ValueCodeGenerator();
             _stringHelper = new StringHelper();
+            _propertyHelper = new PropertyHelper();
+
+            _valueConvertor = new ValueConvertor();
+            _nameConvertor = new NameConvertor();
         }
 
         public string Generate(Type objectType)
@@ -35,7 +39,7 @@ namespace BanBrick.TypeScript.CodeGenerator.Generators
 
             var stringBuilder = new StringBuilder();
 
-            var typeScriptType = _typeHelper.GetTypeScriptName(objectType);
+            var typeScriptType = _nameConvertor.GetTypeScriptName(objectType);
             
             stringBuilder.AppendLine($"export class {typeScriptType} {{");
             stringBuilder.AppendLine("  constructor(");
@@ -56,10 +60,10 @@ namespace BanBrick.TypeScript.CodeGenerator.Generators
                     continue;
 
                 var propertyType = property.PropertyType;
-                var propertyName = _typeHelper.GetTypeScriptName(propertyType);
+                var propertyName = _nameConvertor.GetTypeScriptName(propertyType);
                 var propertyValue = instance == null ? null : property.GetValue(instance);
 
-                var valueCode = _valueCodeGenerator.GenerateValueCode(propertyType, propertyValue);
+                var valueCode = _valueConvertor.GenerateValueCode(propertyType, propertyValue);
                 
                 var noValueCode = string.IsNullOrEmpty(valueCode);
 

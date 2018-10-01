@@ -8,8 +8,13 @@ namespace BanBrick.TypeScript.CodeGenerator.Annotations
     public class TypeScriptObjectAttribute: Attribute
     {
         public TypeScriptObjectAttribute() { }
-        public TypeScriptObjectAttribute(string name) => (Name) = name;
+        public TypeScriptObjectAttribute(string name) 
+            => (Name) = name;
+        public TypeScriptObjectAttribute(string name, TypeScriptObjectType type)
+            => (Type, Name) = (type, name);
 
         public string Name { get; set; }
+
+        public TypeScriptObjectType Type { get; set; }
     }
 }
