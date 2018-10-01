@@ -4,7 +4,7 @@ using System.Text;
 
 namespace BanBrick.TypeScript.CodeGenerator.Helpers
 {
-    public class StringHelper
+    internal class StringHelper
     {
         public string ToCamelCase(string value)
         {

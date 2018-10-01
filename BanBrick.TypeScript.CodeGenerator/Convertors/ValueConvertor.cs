@@ -9,7 +9,7 @@ using System.Text;
 
 namespace BanBrick.TypeScript.CodeGenerator.Convertors
 {
-    public class ValueConvertor
+    internal sealed class ValueConvertor
     {
         private readonly TypeHelper _typeHelper;
         private readonly PropertyHelper _propertyHelper;

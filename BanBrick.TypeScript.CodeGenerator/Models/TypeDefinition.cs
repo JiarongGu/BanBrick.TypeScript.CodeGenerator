@@ -9,7 +9,11 @@ namespace BanBrick.TypeScript.CodeGenerator.Models
     internal class TypeDefinition
     {
         public Type Type { get; set; }
-
+        
         public ProcessingCategory Category { get; set; }
+
+        public bool IsNullable { get; set; }
+
+        public bool IsNumeric { get; set; }
     }
 }

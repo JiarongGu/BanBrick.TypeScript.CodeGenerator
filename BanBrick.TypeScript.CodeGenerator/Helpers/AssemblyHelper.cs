@@ -5,7 +5,7 @@ using System.Text;
 
 namespace BanBrick.TypeScript.CodeGenerator.Helpers
 {
-    public class AssemblyHelper
+    internal class AssemblyHelper
     {
         public string GetSectionSeparator(string sectionName)
         {

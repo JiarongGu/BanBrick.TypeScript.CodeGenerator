@@ -8,17 +8,13 @@ using System.Text;
 
 namespace BanBrick.TypeScript.CodeGenerator.Convertors
 {
-    public class NameConvertor
+    internal sealed class NameConvertor
     {
         private readonly TypeHelper _typeHelper;
-        private readonly PropertyHelper _propertyHelper;
-        private readonly StringHelper _stringHelper;
 
         public NameConvertor()
         {
             _typeHelper = new TypeHelper();
-            _propertyHelper = new PropertyHelper();
-            _stringHelper = new StringHelper();
         }
 
         /// <summary>
@@ -42,9 +38,7 @@ namespace BanBrick.TypeScript.CodeGenerator.Convertors
 
         public string GetObjectTypeScriptName(Type type)
         {
-            var isNullable = _typeHelper.IsNullableValueType(type);
-
-            var objectType = isNullable ? type.GetGenericArguments().First() : type;
+            var objectType = type.IsGenericType ? type.GetGenericArguments().First() : type;
 
             var name = objectType.Name;
 
@@ -56,12 +50,12 @@ namespace BanBrick.TypeScript.CodeGenerator.Convertors
 
             return name;
         }
-
+        
         public string GetPrimitiveTypeScriptName(Type type)
         {
             var primitiveType = type;
 
-            if (_typeHelper.IsNullAblePrimitiveType(type))
+            if (_typeHelper.IsNullable(type) && type.IsGenericType)
             {
                 primitiveType = type.GenericTypeArguments.First();
             }

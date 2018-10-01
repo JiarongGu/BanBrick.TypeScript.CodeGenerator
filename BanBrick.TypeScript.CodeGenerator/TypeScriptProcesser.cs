@@ -15,6 +15,7 @@ namespace BanBrick.TypeScript.CodeGenerator
         private readonly EnumCodeGenerator _enumGenerator;
 
         private readonly AssemblyHelper _assemblyHelper;
+
         public TypeScriptProcesser()
         {
             _typeDefinitionGenerator = new TypeDefinitionGenerator();

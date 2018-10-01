@@ -67,7 +67,7 @@ namespace BanBrick.TypeScript.CodeGenerator.Generators
                 
                 var noValueCode = string.IsNullOrEmpty(valueCode);
 
-                var nullableCode =  _typeHelper.IsNullableType(propertyType) && noValueCode ? "?" : "";
+                var nullableCode =  _typeHelper.IsNullable(propertyType) && noValueCode ? "?" : "";
                 stringBuilder.Append($"  public {_stringHelper.ToCamelCase(property.Name)}{nullableCode}: ");
                 
                 if (!noValueCode)

@@ -7,7 +7,7 @@ using System.Text;
 
 namespace BanBrick.TypeScript.CodeGenerator.Helpers
 {
-    public  class PropertyHelper
+    internal  class PropertyHelper
     {
         public bool IsTypeScriptIgnored(PropertyInfo propertyInfo)
         {

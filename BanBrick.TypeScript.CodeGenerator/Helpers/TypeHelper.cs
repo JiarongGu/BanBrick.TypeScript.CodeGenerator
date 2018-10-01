@@ -9,23 +9,17 @@ using System.Text;
 
 namespace BanBrick.TypeScript.CodeGenerator.Helpers
 {
-    public class TypeHelper
+    internal class TypeHelper
     {
         public bool IsDictionaryType(Type type)
         {
-            if (type.IsGenericType
-                && type.GetGenericArguments().Count() == 2
-                && type.GetGenericTypeDefinition() == typeof(IDictionary<,>))
+            if (GetGenericTypeDefinition(type) == typeof(IDictionary<,>))
                 return true;
 
-            if (type.IsGenericType
-                && type.GetGenericArguments().Count() == 2
-                && type.GetGenericTypeDefinition() == typeof(IReadOnlyDictionary<,>))
+            if (GetGenericTypeDefinition(type) == typeof(IReadOnlyDictionary<,>))
                 return true;
 
-            if (type.IsGenericType 
-                && type.GetGenericArguments().Count() == 2
-                && type.GetInterfaces().Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IDictionary<,>)))
+            if (type.GetInterfaces().Any(x => GetGenericTypeDefinition(x) == typeof(IDictionary<,>)))
                 return true;
 
             return false;
@@ -41,18 +35,18 @@ namespace BanBrick.TypeScript.CodeGenerator.Helpers
         /// true if the type is belong to a collection type
         /// </returns>
         public bool IsCollectionType(Type type)
-         {
+        {
             if (type.IsArray)
                 return true;
 
-            if (type.IsGenericType
-                && type.GetGenericArguments().Count() == 1
-                && type.GetGenericTypeDefinition() == typeof(IEnumerable<>))
+            // collection type only has 1 generic argument
+            if (!(type.IsGenericType && type.GetGenericArguments().Count() == 1))
+                return false;
+
+            if (GetGenericTypeDefinition(type) == typeof(IEnumerable<>))
                 return true;
 
-            if (type.IsGenericType
-                && type.GetGenericArguments().Count() == 1
-                && type.GetInterfaces().Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IEnumerable<>)))
+            if (type.GetInterfaces().Any(x => GetGenericTypeDefinition(x) == typeof(IEnumerable<>)))
                 return true;
 
             return false;
@@ -79,19 +73,20 @@ namespace BanBrick.TypeScript.CodeGenerator.Helpers
             return false;
         }
 
-        public bool IsNullableType(Type type)
+        public bool IsNullable(Type type)
         {
-            return !type.IsValueType || IsNullableValueType(type);
+            return !type.IsValueType || IsNullAblePrimitiveType(type);
         }
-
-        public bool IsNullableValueType(Type type)
-        {
-            return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>);
-        }
-
+        
         public bool IsNullAblePrimitiveType(Type type)
         {
-            return type.IsValueType && IsNullableValueType(type) && IsPurePrimitiveType(type.GenericTypeArguments.First());
+            if (!type.IsValueType)
+                return false;
+
+            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
+                return true;
+
+            return false;
         }
 
         public bool IsPurePrimitiveType(Type type)
@@ -105,19 +100,19 @@ namespace BanBrick.TypeScript.CodeGenerator.Helpers
 
         public bool IsSpecialPrimitiveType(Type type)
         {
-            if (type == typeof(Decimal) || type == typeof(String) || type == typeof(DateTime))
+            if (type == typeof(decimal) || type == typeof(string) || type == typeof(DateTime))
             {
                 return true;
             }
             return false;
         }
-        
+
         /// <summary>
         /// Get TypeCategory for Type
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        internal ProcessingCategory GetProcessingCategory(Type type)
+        public ProcessingCategory GetProcessingCategory(Type type)
         {
             if (IsPrimitiveType(type))
                 return ProcessingCategory.Primitive;
@@ -146,7 +141,7 @@ namespace BanBrick.TypeScript.CodeGenerator.Helpers
         /// <returns>
         /// processing type with typescript object name and typescript object type
         /// </returns>
-        internal TypeDefinition ToTypeDefinition(Type type)
+        public TypeDefinition ToTypeDefinition(Type type)
         {
             return new TypeDefinition()
             {
@@ -154,7 +149,7 @@ namespace BanBrick.TypeScript.CodeGenerator.Helpers
                 Category = GetProcessingCategory(type),
             };
         }
-        
+
         public bool IsNumericType(Type type)
         {
             switch (Type.GetTypeCode(type))
@@ -174,6 +169,13 @@ namespace BanBrick.TypeScript.CodeGenerator.Helpers
                 default:
                     return false;
             }
+        }
+        
+        public Type GetGenericTypeDefinition(Type type)
+        {
+            if (type.IsGenericType)
+                return type.GetGenericTypeDefinition();
+            return null;
         }
     }
 }
