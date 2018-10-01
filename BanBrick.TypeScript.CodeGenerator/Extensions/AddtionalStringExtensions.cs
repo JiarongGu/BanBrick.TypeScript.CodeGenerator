@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace BanBrick.TypeScript.CodeGenerator.Helpers
+namespace BanBrick.TypeScript.CodeGenerator.Extensions
 {
-    internal class StringHelper
+    internal static class AddtionalStringExtensions
     {
-        public string ToCamelCase(string value)
+        public static string ToCamelCase(this string value)
         {
             if (string.IsNullOrEmpty(value))
                 return value;

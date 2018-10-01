@@ -1,5 +1,7 @@
 ﻿using BanBrick.TypeScript.CodeGenerator.Convertors;
+using BanBrick.TypeScript.CodeGenerator.Enums;
 using BanBrick.TypeScript.CodeGenerator.Helpers;
+using BanBrick.TypeScript.CodeGenerator.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,31 +9,25 @@ using System.Text;
 
 namespace BanBrick.TypeScript.CodeGenerator.Generators
 {
-    public class EnumCodeGenerator
+    internal sealed class EnumCodeGenerator
     {
-        private readonly TypeHelper _typeHelper;
         private readonly ValueConvertor _valueConvertor;
-        private readonly NameConvertor _nameConvertor;
+        private readonly INameConvertor _nameConvertor;
 
-        public EnumCodeGenerator() {
-            _typeHelper = new TypeHelper();
-            _valueConvertor = new ValueConvertor();
-            _nameConvertor = new NameConvertor();
+        public EnumCodeGenerator(INameConvertor nameConvertor) {
+            _valueConvertor = new ValueConvertor(nameConvertor);
+            _nameConvertor = nameConvertor;
         }
 
-        public string Generate(Type enumType)
+        public string Generate(Type type)
         {
-            if (!enumType.IsEnum)
-                throw new ArgumentException("must be enum type");
-
             var stringBuilder = new StringBuilder();
 
-            var names = Enum.GetNames(enumType);
-            var values = Enum.GetValues(enumType).Cast<int>().ToArray();
-            var enumName = _nameConvertor.GetName(enumType);
+            var names = Enum.GetNames(type);
+            var values = Enum.GetValues(type).Cast<int>().ToArray();
 
             // add typescript enum
-            stringBuilder.AppendLine($"export enum {enumName} {{");
+            stringBuilder.AppendLine($"export enum {_nameConvertor.GetName(type)} {{");
 
             for (int i = 0; i < names.Length; i++)
                 stringBuilder.AppendLine($"  {names[i]} = {values[i]}{(i == names.Length - 1 ? string.Empty : ",")}");
@@ -39,7 +35,7 @@ namespace BanBrick.TypeScript.CodeGenerator.Generators
             stringBuilder.AppendLine("}");
 
             // add typescript enum array
-            stringBuilder.AppendLine($"export const {enumName}Array = [");
+            stringBuilder.AppendLine($"export const {_nameConvertor.GetName(type)}Array = [");
 
             for (int i = 0; i < names.Length; i++)
                 stringBuilder.AppendLine($"  {_valueConvertor.GetStringValueCode(names[i])},");

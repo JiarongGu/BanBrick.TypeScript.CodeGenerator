@@ -135,15 +135,26 @@ namespace BanBrick.TypeScript.CodeGenerator.Helpers
         /// </returns>
         public TypeDefinition ToTypeDefinition(Type type)
         {
+            var nullable = IsNullable(type);
+            var category = GetProcessingCategory(type);
+            var actualType = GetActualType(type, category, nullable);
+
             return new TypeDefinition()
             {
                 Type = type,
-                Category = GetProcessingCategory(type),
-                IsNullable = IsNullable(type),
+                ActualType = actualType,
+                Category = category,
+                IsNullable = nullable,
                 IsNumeric = IsNumericType(type)
             };
         }
-        
+
+        private Type GetActualType(Type type, ProcessingCategory category, bool nullable ) {
+            if (category == ProcessingCategory.Primitive && nullable && type.IsGenericType)
+                return type.GenericTypeArguments.First();
+            return type;
+        }
+
         public Type GetGenericTypeDefinition(Type type)
         {
             if (type.IsGenericType)

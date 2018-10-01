@@ -1,5 +1,6 @@
 ﻿using BanBrick.TypeScript.CodeGenerator.Convertors;
 using BanBrick.TypeScript.CodeGenerator.Enums;
+using BanBrick.TypeScript.CodeGenerator.Extensions;
 using BanBrick.TypeScript.CodeGenerator.Helpers;
 using BanBrick.TypeScript.CodeGenerator.Models;
 using System;
@@ -14,33 +15,26 @@ namespace BanBrick.TypeScript.CodeGenerator.Generators
     internal class ClassCodeGenerator
     {
         private readonly TypeHelper _typeHelper;
-        private readonly StringHelper _stringHelper;
         private readonly PropertyHelper _propertyHelper;
 
         private readonly ValueConvertor _valueConvertor;
-        private readonly NameConvertor _nameConvertor;
+        private readonly INameConvertor _nameConvertor;
 
-        public ClassCodeGenerator()
+        public ClassCodeGenerator(INameConvertor nameConvertor)
         {
             _typeHelper = new TypeHelper();
-            _stringHelper = new StringHelper();
             _propertyHelper = new PropertyHelper();
 
-            _valueConvertor = new ValueConvertor();
-            _nameConvertor = new NameConvertor();
+            _valueConvertor = new ValueConvertor(nameConvertor);
+            _nameConvertor = nameConvertor;
         }
 
-        public string Generate(TypeDefinition typeDefinition)
+        public string Generate(Type objectType)
         {
-            var objectType = typeDefinition.Type;
-
-            if (typeDefinition.Category != ProcessingCategory.Object)
-                throw new ArgumentException("must be object type");
-            
             var stringBuilder = new StringBuilder();
 
             var typeScriptType = _nameConvertor.GetName(objectType);
-            
+
             stringBuilder.AppendLine($"export class {typeScriptType} {{");
             stringBuilder.AppendLine("  constructor(");
 
@@ -68,7 +62,7 @@ namespace BanBrick.TypeScript.CodeGenerator.Generators
                 var noValueCode = string.IsNullOrEmpty(valueCode);
 
                 var nullableCode =  _typeHelper.IsNullable(propertyType) && noValueCode ? "?" : "";
-                stringBuilder.Append($"  public {_stringHelper.ToCamelCase(property.Name)}{nullableCode}: ");
+                stringBuilder.Append($"  public {property.Name.ToCamelCase()}{nullableCode}: ");
                 
                 if (!noValueCode)
                 {

@@ -1,4 +1,5 @@
 ﻿using BanBrick.TypeScript.CodeGenerator.Enums;
+using BanBrick.TypeScript.CodeGenerator.Extensions;
 using BanBrick.TypeScript.CodeGenerator.Helpers;
 using System;
 using System.Collections;
@@ -13,15 +14,13 @@ namespace BanBrick.TypeScript.CodeGenerator.Convertors
     {
         private readonly TypeHelper _typeHelper;
         private readonly PropertyHelper _propertyHelper;
-        private readonly StringHelper _stringHelper;
-        private readonly NameConvertor _nameConvertor;
+        private readonly INameConvertor _nameConvertor;
 
-        public ValueConvertor()
+        public ValueConvertor(INameConvertor nameConvertor)
         {
             _typeHelper = new TypeHelper();
             _propertyHelper = new PropertyHelper();
-            _stringHelper = new StringHelper();
-            _nameConvertor = new NameConvertor();
+            _nameConvertor = nameConvertor;
         }
 
         /// <summary>
@@ -140,7 +139,7 @@ namespace BanBrick.TypeScript.CodeGenerator.Convertors
                 var propertyName = _nameConvertor.GetName(propertyType);
                 var valueCode = GetValueCode(propertyType, property.GetValue(value));
 
-                objectPropertiesCode.Add($"{_stringHelper.ToCamelCase(property.Name)}: {valueCode}");
+                objectPropertiesCode.Add($"{property.Name.ToCamelCase()}: {valueCode}");
             }
             return $"{{ {string.Join(",\n", objectPropertiesCode)} }}";
         }
