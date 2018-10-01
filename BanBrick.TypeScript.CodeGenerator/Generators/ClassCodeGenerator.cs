@@ -1,5 +1,7 @@
 ﻿using BanBrick.TypeScript.CodeGenerator.Convertors;
+using BanBrick.TypeScript.CodeGenerator.Enums;
 using BanBrick.TypeScript.CodeGenerator.Helpers;
+using BanBrick.TypeScript.CodeGenerator.Models;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,7 +11,7 @@ using System.Text;
 
 namespace BanBrick.TypeScript.CodeGenerator.Generators
 {
-    public class ClassCodeGenerator
+    internal class ClassCodeGenerator
     {
         private readonly TypeHelper _typeHelper;
         private readonly StringHelper _stringHelper;
@@ -28,15 +30,13 @@ namespace BanBrick.TypeScript.CodeGenerator.Generators
             _nameConvertor = new NameConvertor();
         }
 
-        public string Generate(Type objectType)
+        public string Generate(TypeDefinition typeDefinition)
         {
-            if (objectType.IsEnum || objectType.IsPrimitive || objectType.IsGenericType)
+            var objectType = typeDefinition.Type;
+
+            if (typeDefinition.Category != ProcessingCategory.Object)
                 throw new ArgumentException("must be object type");
-
-            if (objectType.IsInterface)
-                throw new ArgumentException("currently not support interface");
-
-
+            
             var stringBuilder = new StringBuilder();
 
             var typeScriptType = _nameConvertor.GetName(objectType);

@@ -39,7 +39,7 @@ namespace BanBrick.TypeScript.CodeGenerator
 
             codeBuilder.Append(_assemblyHelper.GetSectionSeparator("Classes"));
             managedTypes.Where(x => x.Category == Enums.ProcessingCategory.Object).ToList().ForEach(x =>
-                codeBuilder.AppendLine(_objectGenerator.Generate(x.Type))
+                codeBuilder.AppendLine(_objectGenerator.Generate(x))
             );
 
             return codeBuilder.ToString();

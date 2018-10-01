@@ -36,8 +36,7 @@ namespace BanBrick.TypeScript.CodeGenerator.Generators
 
                 // add type to category types
                 var processingTypeCategory = _typeHelper.GetProcessingCategory(processingType);
-                if (processingTypeCategory == ProcessingCategory.Enum || processingTypeCategory == ProcessingCategory.Object)
-                    managedTypes.Add(_typeHelper.ToTypeDefinition(processingType));
+                managedTypes.Add(_typeHelper.ToTypeDefinition(processingType));
 
                 // process all properties
                 foreach (var property in TypeExtensions.GetProperties(processingType))
@@ -47,30 +46,11 @@ namespace BanBrick.TypeScript.CodeGenerator.Generators
 
                     var propertyType = property.PropertyType;
                     
-                    var typeCategory = _typeHelper.GetProcessingCategory(propertyType);
+                    unProcessedTypes.Add(propertyType);
 
-                    if (typeCategory == ProcessingCategory.Primitive)
-                        continue;
-
-                    if (typeCategory == ProcessingCategory.Enum || typeCategory == ProcessingCategory.Object)
-                    {
-                        unProcessedTypes.Add(propertyType);
-                        continue;
-                    }
-
-                    if (typeCategory == ProcessingCategory.Collection) {
-                        if (propertyType.IsArray) {
-                            unProcessedTypes.Add(propertyType.GetElementType());
-                        } else {
-                            unProcessedTypes.AddRange(propertyType.GetGenericArguments());
-                        }
-                        continue;
-                    }
-
-                    if (typeCategory == ProcessingCategory.Dictionary || typeCategory == ProcessingCategory.Generic)
+                    if (propertyType.IsGenericType)
                     {
                         unProcessedTypes.AddRange(propertyType.GetGenericArguments());
-                        continue;
                     }
                 }
             }

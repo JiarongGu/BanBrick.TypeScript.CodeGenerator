@@ -73,38 +73,30 @@ namespace BanBrick.TypeScript.CodeGenerator.Helpers
             return false;
         }
 
+        public bool IsNumericType(Type type)
+        {
+            switch (Type.GetTypeCode(type))
+            {
+                case TypeCode.Byte:
+                case TypeCode.SByte:
+                case TypeCode.UInt16:
+                case TypeCode.UInt32:
+                case TypeCode.UInt64:
+                case TypeCode.Int16:
+                case TypeCode.Int32:
+                case TypeCode.Int64:
+                case TypeCode.Decimal:
+                case TypeCode.Double:
+                case TypeCode.Single:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
         public bool IsNullable(Type type)
         {
             return !type.IsValueType || IsNullAblePrimitiveType(type);
-        }
-        
-        public bool IsNullAblePrimitiveType(Type type)
-        {
-            if (!type.IsValueType)
-                return false;
-
-            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
-                return true;
-
-            return false;
-        }
-
-        public bool IsPurePrimitiveType(Type type)
-        {
-            if (type.IsPrimitive || IsSpecialPrimitiveType(type))
-            {
-                return true;
-            }
-            return false;
-        }
-
-        public bool IsSpecialPrimitiveType(Type type)
-        {
-            if (type == typeof(decimal) || type == typeof(string) || type == typeof(DateTime))
-            {
-                return true;
-            }
-            return false;
         }
 
         /// <summary>
@@ -147,28 +139,9 @@ namespace BanBrick.TypeScript.CodeGenerator.Helpers
             {
                 Type = type,
                 Category = GetProcessingCategory(type),
+                IsNullable = IsNullable(type),
+                IsNumeric = IsNumericType(type)
             };
-        }
-
-        public bool IsNumericType(Type type)
-        {
-            switch (Type.GetTypeCode(type))
-            {
-                case TypeCode.Byte:
-                case TypeCode.SByte:
-                case TypeCode.UInt16:
-                case TypeCode.UInt32:
-                case TypeCode.UInt64:
-                case TypeCode.Int16:
-                case TypeCode.Int32:
-                case TypeCode.Int64:
-                case TypeCode.Decimal:
-                case TypeCode.Double:
-                case TypeCode.Single:
-                    return true;
-                default:
-                    return false;
-            }
         }
         
         public Type GetGenericTypeDefinition(Type type)
@@ -176,6 +149,35 @@ namespace BanBrick.TypeScript.CodeGenerator.Helpers
             if (type.IsGenericType)
                 return type.GetGenericTypeDefinition();
             return null;
+        }
+
+        private bool IsNullAblePrimitiveType(Type type)
+        {
+            if (!type.IsValueType)
+                return false;
+
+            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
+                return true;
+
+            return false;
+        }
+
+        private bool IsPurePrimitiveType(Type type)
+        {
+            if (type.IsPrimitive || IsSpecialPrimitiveType(type))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        private bool IsSpecialPrimitiveType(Type type)
+        {
+            if (type == typeof(decimal) || type == typeof(string) || type == typeof(DateTime))
+            {
+                return true;
+            }
+            return false;
         }
     }
 }
