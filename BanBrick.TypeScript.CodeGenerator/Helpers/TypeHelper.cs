@@ -1,11 +1,10 @@
-﻿using BanBrick.TypeScript.CodeGenerator.Annotations;
-using BanBrick.TypeScript.CodeGenerator.Enums;
+﻿using BanBrick.TypeScript.CodeGenerator.Enums;
 using BanBrick.TypeScript.CodeGenerator.Models;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace BanBrick.TypeScript.CodeGenerator.Helpers
@@ -118,24 +117,24 @@ namespace BanBrick.TypeScript.CodeGenerator.Helpers
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        public TypeCategory GetTypeCategory(Type type)
+        internal ProcessingCategory GetProcessingCategory(Type type)
         {
             if (IsPrimitiveType(type))
-                return TypeCategory.Primitive;
+                return ProcessingCategory.Primitive;
 
             if (IsDictionaryType(type))
-                return TypeCategory.Dictionary;
+                return ProcessingCategory.Dictionary;
 
             if (IsCollectionType(type))
-                return TypeCategory.Collection;
+                return ProcessingCategory.Collection;
 
             if (type.IsEnum)
-                return TypeCategory.Enum;
+                return ProcessingCategory.Enum;
 
             if (type.IsGenericType)
-                return TypeCategory.Generic;
+                return ProcessingCategory.Generic;
 
-            return TypeCategory.Object;
+            return ProcessingCategory.Object;
         }
 
         /// <summary>
@@ -147,12 +146,12 @@ namespace BanBrick.TypeScript.CodeGenerator.Helpers
         /// <returns>
         /// processing type with typescript object name and typescript object type
         /// </returns>
-        public ManagedType ToCategoryType(Type type)
+        internal TypeDefinition ToTypeDefinition(Type type)
         {
-            return new ManagedType()
+            return new TypeDefinition()
             {
                 Type = type,
-                Category = GetTypeCategory(type),
+                Category = GetProcessingCategory(type),
             };
         }
         

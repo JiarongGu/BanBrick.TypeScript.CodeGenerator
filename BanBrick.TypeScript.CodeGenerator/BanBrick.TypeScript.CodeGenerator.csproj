@@ -9,5 +9,4 @@
     <PackageReference Include="BanBrick.TypeScript.CodeGenerator.Annotations" Version="1.0.6" />
     <PackageReference Include="System.Reflection.TypeExtensions" Version="4.5.1" />
   </ItemGroup>
-
 </Project>

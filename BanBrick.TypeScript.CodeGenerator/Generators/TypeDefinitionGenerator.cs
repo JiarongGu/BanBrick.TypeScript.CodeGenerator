@@ -5,24 +5,25 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace BanBrick.TypeScript.CodeGenerator.Generators
 {
-    public class ManagedTypeGenerator
+    internal class TypeDefinitionGenerator
     {
         private readonly TypeHelper _typeHelper;
         private readonly PropertyHelper _propertyHelper;
 
-        public ManagedTypeGenerator() {
+        public TypeDefinitionGenerator() {
             _typeHelper = new TypeHelper();
             _propertyHelper = new PropertyHelper();
         }
 
-        public ICollection<ManagedType> Generate(IEnumerable<Type> types) {
+        public ICollection<TypeDefinition> Generate(IEnumerable<Type> types) {
             var unProcessedTypes = types.ToList();
-            var managedTypes = new List<ManagedType>();
-
+            var managedTypes = new List<TypeDefinition>();
+            
             while (unProcessedTypes.Any())
             {
                 // pop first type
@@ -34,9 +35,9 @@ namespace BanBrick.TypeScript.CodeGenerator.Generators
                     continue;
 
                 // add type to category types
-                var processingTypeCategory = _typeHelper.GetTypeCategory(processingType);
-                if (processingTypeCategory == TypeCategory.Enum || processingTypeCategory == TypeCategory.Object)
-                    managedTypes.Add(_typeHelper.ToCategoryType(processingType));
+                var processingTypeCategory = _typeHelper.GetProcessingCategory(processingType);
+                if (processingTypeCategory == ProcessingCategory.Enum || processingTypeCategory == ProcessingCategory.Object)
+                    managedTypes.Add(_typeHelper.ToTypeDefinition(processingType));
 
                 // process all properties
                 foreach (var property in TypeExtensions.GetProperties(processingType))
@@ -46,18 +47,18 @@ namespace BanBrick.TypeScript.CodeGenerator.Generators
 
                     var propertyType = property.PropertyType;
                     
-                    var typeCategory = _typeHelper.GetTypeCategory(propertyType);
+                    var typeCategory = _typeHelper.GetProcessingCategory(propertyType);
 
-                    if (typeCategory == TypeCategory.Primitive)
+                    if (typeCategory == ProcessingCategory.Primitive)
                         continue;
 
-                    if (typeCategory == TypeCategory.Enum || typeCategory == TypeCategory.Object)
+                    if (typeCategory == ProcessingCategory.Enum || typeCategory == ProcessingCategory.Object)
                     {
                         unProcessedTypes.Add(propertyType);
                         continue;
                     }
 
-                    if (typeCategory == TypeCategory.Collection) {
+                    if (typeCategory == ProcessingCategory.Collection) {
                         if (propertyType.IsArray) {
                             unProcessedTypes.Add(propertyType.GetElementType());
                         } else {
@@ -66,7 +67,7 @@ namespace BanBrick.TypeScript.CodeGenerator.Generators
                         continue;
                     }
 
-                    if (typeCategory == TypeCategory.Dictionary || typeCategory == TypeCategory.Generic)
+                    if (typeCategory == ProcessingCategory.Dictionary || typeCategory == ProcessingCategory.Generic)
                     {
                         unProcessedTypes.AddRange(propertyType.GetGenericArguments());
                         continue;

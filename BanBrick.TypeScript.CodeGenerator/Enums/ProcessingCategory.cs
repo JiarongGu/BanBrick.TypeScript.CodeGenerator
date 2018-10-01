@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace BanBrick.TypeScript.CodeGenerator.Enums
 {
-    public enum TypeCategory
+    internal enum ProcessingCategory
     {
         Dictionary,
         Collection,

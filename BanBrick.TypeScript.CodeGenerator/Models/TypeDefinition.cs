@@ -6,10 +6,10 @@ using System.Text;
 
 namespace BanBrick.TypeScript.CodeGenerator.Models
 {
-    public class ManagedType
+    internal class TypeDefinition
     {
         public Type Type { get; set; }
 
-        public TypeCategory Category { get; set; }
+        public ProcessingCategory Category { get; set; }
     }
 }

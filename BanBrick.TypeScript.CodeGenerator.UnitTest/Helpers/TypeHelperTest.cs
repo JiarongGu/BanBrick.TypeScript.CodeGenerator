@@ -88,9 +88,9 @@ namespace BanBrick.TypeScript.CodeGenerator.UnitTest.Helpers
         [Fact]
         public void GetTypeCategory_Should_ReturnObject()
         {
-            Assert.Equal(TypeCategory.Object, _typeHelper.GetTypeCategory(typeof(TestPrimitiveModel)));
-            Assert.Equal(TypeCategory.Object, _typeHelper.GetTypeCategory(typeof(TestCollectionModel)));
-            Assert.Equal(TypeCategory.Object, _typeHelper.GetTypeCategory(typeof(TestDictionaryModel)));
+            Assert.Equal(ProcessingCategory.Object, _typeHelper.GetProcessingCategory(typeof(TestPrimitiveModel)));
+            Assert.Equal(ProcessingCategory.Object, _typeHelper.GetProcessingCategory(typeof(TestCollectionModel)));
+            Assert.Equal(ProcessingCategory.Object, _typeHelper.GetProcessingCategory(typeof(TestDictionaryModel)));
         }
     }
 }

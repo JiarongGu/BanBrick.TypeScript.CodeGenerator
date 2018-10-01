@@ -32,9 +32,9 @@ namespace BanBrick.TypeScript.CodeGenerator.Convertors
         /// <returns></returns>
         public string GenerateValueCode(Type type, object value)
         {
-            var typeCategory = _typeHelper.GetTypeCategory(type);
+            var typeCategory = _typeHelper.GetProcessingCategory(type);
 
-            if (typeCategory == TypeCategory.Primitive)
+            if (typeCategory == ProcessingCategory.Primitive)
             {
                 if (_typeHelper.IsPrimitiveType(type) && value == null)
                     return null;
@@ -42,22 +42,22 @@ namespace BanBrick.TypeScript.CodeGenerator.Convertors
                 return GetPrimitiveValueCode(value);
             }
 
-            if (typeCategory == TypeCategory.Enum)
+            if (typeCategory == ProcessingCategory.Enum)
             {
                 return GetEnumValueCode(_nameConvertor.GetTypeScriptName(type), value);
             }
 
-            if (typeCategory == TypeCategory.Collection)
+            if (typeCategory == ProcessingCategory.Collection)
             {
                 return GenerateArrayValueCode(value);
             }
 
-            if (typeCategory == TypeCategory.Dictionary)
+            if (typeCategory == ProcessingCategory.Dictionary)
             {
                 return GenerateDictionaryCode(value);
             }
 
-            if (typeCategory == TypeCategory.Object)
+            if (typeCategory == ProcessingCategory.Object)
             {
                 return GenerateObjectCode(value);
             }
