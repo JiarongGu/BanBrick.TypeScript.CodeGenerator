@@ -17,15 +17,15 @@ namespace BanBrick.TypeScript.CodeGenerator.Generators
         private readonly TypeHelper _typeHelper;
         private readonly PropertyHelper _propertyHelper;
 
-        private readonly ValueConvertor _valueConvertor;
+        private readonly IValueConvertor _valueConvertor;
         private readonly INameConvertor _nameConvertor;
 
-        public ClassCodeGenerator(INameConvertor nameConvertor)
+        public ClassCodeGenerator(INameConvertor nameConvertor, IValueConvertor valueConvertor)
         {
             _typeHelper = new TypeHelper();
             _propertyHelper = new PropertyHelper();
 
-            _valueConvertor = new ValueConvertor(nameConvertor);
+            _valueConvertor = valueConvertor;
             _nameConvertor = nameConvertor;
         }
 
@@ -57,7 +57,7 @@ namespace BanBrick.TypeScript.CodeGenerator.Generators
                 var propertyName = _nameConvertor.GetName(propertyType);
                 var propertyValue = instance == null ? null : property.GetValue(instance);
 
-                var valueCode = _valueConvertor.GetValueCode(propertyType, propertyValue);
+                var valueCode = _valueConvertor.GetValue(propertyType, propertyValue);
                 
                 var noValueCode = string.IsNullOrEmpty(valueCode);
 

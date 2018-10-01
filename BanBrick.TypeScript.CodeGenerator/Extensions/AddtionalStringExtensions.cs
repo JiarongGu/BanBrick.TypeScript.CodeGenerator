@@ -13,5 +13,10 @@ namespace BanBrick.TypeScript.CodeGenerator.Extensions
 
             return value[0].ToString().ToLower() + value.Substring(1);
         }
+        
+        public static string ToTypeScript(this string value)
+        {
+            return "'" + (value?.Replace("'", "\'") ?? "") + "'";
+        }
     }
 }

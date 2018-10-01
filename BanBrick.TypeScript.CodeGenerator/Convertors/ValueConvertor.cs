@@ -1,26 +1,33 @@
 ﻿using BanBrick.TypeScript.CodeGenerator.Enums;
 using BanBrick.TypeScript.CodeGenerator.Extensions;
 using BanBrick.TypeScript.CodeGenerator.Helpers;
+using BanBrick.TypeScript.CodeGenerator.Models;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 
 namespace BanBrick.TypeScript.CodeGenerator.Convertors
 {
-    internal sealed class ValueConvertor
+    internal interface IValueConvertor
     {
-        private readonly TypeHelper _typeHelper;
+        string GetValue(Type type, object value);
+    }
+
+    internal sealed class ValueConvertor: IValueConvertor
+    {
         private readonly PropertyHelper _propertyHelper;
         private readonly INameConvertor _nameConvertor;
+        private readonly IDictionary<Type, TypeDefinition> _typeDictionary;
 
-        public ValueConvertor(INameConvertor nameConvertor)
+        public ValueConvertor(IEnumerable<TypeDefinition> typeDefinitions, INameConvertor nameConvertor)
         {
-            _typeHelper = new TypeHelper();
             _propertyHelper = new PropertyHelper();
             _nameConvertor = nameConvertor;
+            _typeDictionary = typeDefinitions.ToDictionary(x => x.Type, x => x);
         }
 
         /// <summary>
@@ -29,63 +36,62 @@ namespace BanBrick.TypeScript.CodeGenerator.Convertors
         /// <param name="type"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public string GetValueCode(Type type, object value)
+        public string GetValue(Type type, object value)
         {
-            var typeCategory = _typeHelper.GetProcessingCategory(type);
+            var category = _typeDictionary[type].Category;
 
-            if (typeCategory == ProcessingCategory.Primitive)
+            if (category == ProcessingCategory.Primitive)
             {
-                if (_typeHelper.IsPrimitiveType(type) && value == null)
-                    return null;
-
-                return GetPrimitiveValueCode(value);
+                if (value == null) return null;
+                return GetPrimitive(value);
             }
 
-            if (typeCategory == ProcessingCategory.Enum)
+            if (category == ProcessingCategory.Enum)
             {
-                return GetEnumValueCode(_nameConvertor.GetName(type), value);
+                return GetEnumValue(_nameConvertor.GetName(type), value);
             }
 
-            if (typeCategory == ProcessingCategory.Collection)
+            if (category == ProcessingCategory.Collection)
             {
-                return GenerateArrayValueCode(value);
+                return GenerateArray(value);
             }
 
-            if (typeCategory == ProcessingCategory.Dictionary)
+            if (category == ProcessingCategory.Dictionary)
             {
-                return GenerateDictionaryCode(value);
+                return GenerateDictionary(value);
             }
 
-            if (typeCategory == ProcessingCategory.Object)
+            if (category == ProcessingCategory.Object)
             {
-                return GenerateObjectCode(value);
+                return GenerateObject(value);
             }
 
             return "";
         }
         
-        public string GetPrimitiveValueCode(object value)
+        private string GetPrimitive(object value)
         {
             if (value == null) return "null";
 
             var type = value.GetType();
+            var typeDefinition = _typeDictionary[type];
 
             if (type == typeof(bool))
                 return (bool)value ? "true" : "false";
 
-            if (_typeHelper.IsNumericType(type))
+            if (typeDefinition.IsNumeric)
                 return value.ToString();
 
             if (type == typeof(string))
-                return GetStringValueCode((string)value);
+                return ((string)value).ToTypeScript();
 
             if (type == typeof(DateTime) && ((DateTime)value).Ticks > 0 )
-                return GetStringValueCode(((DateTime)value).ToUniversalTime().ToString("o", CultureInfo.InvariantCulture));
+                return ((DateTime)value).ToUniversalTime().ToString("o", CultureInfo.InvariantCulture).ToTypeScript();
 
             return null;
         }
-        
-        public string GenerateArrayValueCode(object value)
+
+        private string GenerateArray(object value)
         {
             if (value == null)
                 return "[]";
@@ -95,13 +101,13 @@ namespace BanBrick.TypeScript.CodeGenerator.Convertors
 
             foreach (var arrayValue in arrayValues)
             {
-                arrayValuesCode.Add(GetValueCode(arrayValue.GetType(), arrayValue));
+                arrayValuesCode.Add(GetValue(arrayValue.GetType(), arrayValue));
             }
 
             return $"[ {string.Join(", ", arrayValuesCode)} ]";
         }
 
-        public string GenerateDictionaryCode(object value)
+        private string GenerateDictionary(object value)
         {
             if (value == null)
                 return "{}";
@@ -115,13 +121,13 @@ namespace BanBrick.TypeScript.CodeGenerator.Convertors
                 var keyType = key.GetType();
                 var keyValueType = keyValue.GetType();
 
-                dictionaryValuesCode.Add($"{GetValueCode(keyType, key)}: {GetValueCode(keyValueType, keyValue)}");
+                dictionaryValuesCode.Add($"{GetValue(keyType, key)}: {GetValue(keyValueType, keyValue)}");
             }
 
             return $"{{ {string.Join(", ", dictionaryValuesCode)} }}";
         }
 
-        public string GenerateObjectCode(object value)
+        private string GenerateObject(object value)
         {
             if (value == null)
                 return "";
@@ -137,19 +143,14 @@ namespace BanBrick.TypeScript.CodeGenerator.Convertors
 
                 var propertyType = property.PropertyType;
                 var propertyName = _nameConvertor.GetName(propertyType);
-                var valueCode = GetValueCode(propertyType, property.GetValue(value));
+                var valueCode = GetValue(propertyType, property.GetValue(value));
 
                 objectPropertiesCode.Add($"{property.Name.ToCamelCase()}: {valueCode}");
             }
             return $"{{ {string.Join(",\n", objectPropertiesCode)} }}";
         }
-        
-        public string GetStringValueCode(string value)
-        {
-            return "'" + (value?.Replace("'", "\'") ?? "") + "'";
-        }
 
-        public string GetEnumValueCode(string enumName, object value)
+        private string GetEnumValue(string enumName, object value)
         {
             return $"{enumName}.{value.ToString()}";
         }

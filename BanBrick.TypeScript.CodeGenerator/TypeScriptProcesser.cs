@@ -22,10 +22,11 @@ namespace BanBrick.TypeScript.CodeGenerator
 
         public string GenerateTypeScript(IEnumerable<Type> types) {
             var typeDefinitions = types.ResolveRelations().ResolveNames();
-
+            
             var nameConvertor = new NameConvertor(typeDefinitions);
+            var valueConvertor = new ValueConvertor(typeDefinitions, nameConvertor);
 
-            var classGenerator = new ClassCodeGenerator(nameConvertor);
+            var classGenerator = new ClassCodeGenerator(nameConvertor, valueConvertor);
             var enumGenerator = new EnumCodeGenerator(nameConvertor);
 
             var codeBuilder = new StringBuilder();
