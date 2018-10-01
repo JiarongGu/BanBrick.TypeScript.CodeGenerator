@@ -90,8 +90,7 @@ namespace BanBrick.TypeScript.CodeGenerator.Processers
         {
             return types.All(t => typeDefinitions.Any(x => x.Type == t));
         }
-
-
+        
         public string GetPrimitiveName(TypeDefinition typeDefinition)
         {
             var type = typeDefinition.ActualType;
