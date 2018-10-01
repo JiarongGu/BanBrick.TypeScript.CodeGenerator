@@ -1,4 +1,5 @@
-﻿using BanBrick.TypeScript.CodeGenerator.Enums;
+﻿using BanBrick.TypeScript.CodeGenerator.Annotations;
+using BanBrick.TypeScript.CodeGenerator.Enums;
 using BanBrick.TypeScript.CodeGenerator.Models;
 using System;
 using System.Collections.Generic;
@@ -145,8 +146,28 @@ namespace BanBrick.TypeScript.CodeGenerator.Helpers
                 ActualType = actualType,
                 Category = category,
                 IsNullable = nullable,
-                IsNumeric = IsNumericType(type)
+                IsNumeric = IsNumericType(type),
+                ProcessType = GetProcessType(type, category)
             };
+        }
+
+        private TypeScriptObjectType GetProcessType(Type type, ProcessingCategory category) {
+            var info = type.GetCustomAttribute<TypeScriptObjectAttribute>();
+            if (info == null || info.Type == TypeScriptObjectType.Default)
+            {
+                switch (category)
+                {
+                    case ProcessingCategory.Enum:
+                        return TypeScriptObjectType.Enum;
+                    case ProcessingCategory.Object:
+                        return TypeScriptObjectType.Class;
+                    default:
+                        return TypeScriptObjectType.Default;
+                }
+            }
+            else {
+                return info.Type;
+            }
         }
 
         private Type GetActualType(Type type, ProcessingCategory category, bool nullable ) {

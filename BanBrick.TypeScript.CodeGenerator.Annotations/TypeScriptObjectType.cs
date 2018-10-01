@@ -6,10 +6,10 @@ namespace BanBrick.TypeScript.CodeGenerator.Annotations
 {
     public enum TypeScriptObjectType
     {
+        Default,
         Class,
-        Interface,
-        Array,
+        Const,
         Enum,
-        Dictionary
+        Interface
     }
 }

@@ -1,4 +1,5 @@
-﻿using BanBrick.TypeScript.CodeGenerator.Enums;
+﻿using BanBrick.TypeScript.CodeGenerator.Annotations;
+using BanBrick.TypeScript.CodeGenerator.Enums;
 using BanBrick.TypeScript.CodeGenerator.Models;
 using BanBrick.TypeScript.CodeGenerator.Processers;
 using System;
@@ -20,9 +21,9 @@ namespace BanBrick.TypeScript.CodeGenerator.Extensions
             return new TypeNameProcesser().Process(typeDefinitions);
         }
         
-        public static List<Type> GetProcessingTypes(this IEnumerable<TypeDefinition> typeDefinitions, ProcessingCategory processingCategory)
+        public static List<Type> GetProcessingTypes(this IEnumerable<TypeDefinition> typeDefinitions, TypeScriptObjectType processingType)
         {
-            return typeDefinitions.Where(x => x.Category == processingCategory).Select(x => x.Type).ToList();
+            return typeDefinitions.Where(x => x.ProcessType == processingType).Select(x => x.Type).ToList();
         }
     }
 }

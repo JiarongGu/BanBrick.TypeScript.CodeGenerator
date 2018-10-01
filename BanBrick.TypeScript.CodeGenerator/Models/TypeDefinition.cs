@@ -14,6 +14,8 @@ namespace BanBrick.TypeScript.CodeGenerator.Models
 
         public ProcessingCategory Category { get; set; }
 
+        public TypeScriptObjectType ProcessType { get; set; }
+
         public string Name { get; set; }
 
         public bool IsNullable { get; set; }

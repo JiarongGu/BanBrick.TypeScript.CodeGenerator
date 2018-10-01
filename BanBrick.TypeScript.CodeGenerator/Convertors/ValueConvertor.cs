@@ -14,7 +14,7 @@ namespace BanBrick.TypeScript.CodeGenerator.Convertors
 {
     internal interface IValueConvertor
     {
-        string GetValue(Type type, object value);
+        string GetValue(Type type, object value, int indentation = 0);
     }
 
     internal sealed class ValueConvertor: IValueConvertor
@@ -36,7 +36,7 @@ namespace BanBrick.TypeScript.CodeGenerator.Convertors
         /// <param name="type"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public string GetValue(Type type, object value)
+        public string GetValue(Type type, object value, int indentation = 0)
         {
             var category = _typeDictionary[type].Category;
 
@@ -58,12 +58,12 @@ namespace BanBrick.TypeScript.CodeGenerator.Convertors
 
             if (category == ProcessingCategory.Dictionary)
             {
-                return GenerateDictionary(value);
+                return GenerateDictionary(value, indentation);
             }
 
             if (category == ProcessingCategory.Object)
             {
-                return GenerateObject(value);
+                return GenerateObject(value, indentation);
             }
 
             return "";
@@ -107,7 +107,7 @@ namespace BanBrick.TypeScript.CodeGenerator.Convertors
             return $"[ {string.Join(", ", arrayValuesCode)} ]";
         }
 
-        private string GenerateDictionary(object value)
+        private string GenerateDictionary(object value, int indentation = 0)
         {
             if (value == null)
                 return "{}";
@@ -121,13 +121,18 @@ namespace BanBrick.TypeScript.CodeGenerator.Convertors
                 var keyType = key.GetType();
                 var keyValueType = keyValue.GetType();
 
-                dictionaryValuesCode.Add($"{GetValue(keyType, key)}: {GetValue(keyValueType, keyValue)}");
+                dictionaryValuesCode.Add($"\n{new string(' ', indentation + 2)}{GetValue(keyType, key)}: {GetValue(keyValueType, keyValue, indentation + 2)}");
             }
+            var code = string.Join($",", dictionaryValuesCode);
 
-            return $"{{ {string.Join(", ", dictionaryValuesCode)} }}";
+            if (string.IsNullOrEmpty(code))
+            {
+                return "{}";
+            }
+            return $"{{{code}\n{new string(' ', indentation)}}}";
         }
 
-        private string GenerateObject(object value)
+        private string GenerateObject(object value, int indentation = 0)
         {
             if (value == null)
                 return "";
@@ -143,11 +148,18 @@ namespace BanBrick.TypeScript.CodeGenerator.Convertors
 
                 var propertyType = property.PropertyType;
                 var propertyName = _nameConvertor.GetName(propertyType);
-                var valueCode = GetValue(propertyType, property.GetValue(value));
+                var valueCode = GetValue(propertyType, property.GetValue(value), indentation + 2);
 
-                objectPropertiesCode.Add($"{property.Name.ToCamelCase()}: {valueCode}");
+                objectPropertiesCode.Add($"\n{new string(' ', indentation + 2)}{property.Name.ToCamelCase()}: {valueCode}");
             }
-            return $"{{ {string.Join(",\n", objectPropertiesCode)} }}";
+            var code = string.Join($",", objectPropertiesCode);
+
+            if (string.IsNullOrEmpty(code))
+            {
+                return "{}";
+            }
+
+            return $"{{{code}\n{new string(' ', indentation)}}}";
         }
 
         private string GetEnumValue(string enumName, object value)

@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>BanBrick.TypeScript.CodeGenerator</id>
-    <version>1.0.12</version>
+    <version>1.1.0</version>
     <authors>jiarong.gu</authors>
     <owners>jiarong.gu</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -14,7 +14,7 @@
     <projectUrl>https://github.com/JiarongGu/BanBrick.TypeScript.CodeGenerator</projectUrl>
     <dependencies>
       <group>
-        <dependency id="BanBrick.TypeScript.CodeGenerator.Annotations" version="1.1.*" />
+        <dependency id="BanBrick.TypeScript.CodeGenerator.Annotations" version="1.1.2" />
       </group>
     </dependencies>
   </metadata>

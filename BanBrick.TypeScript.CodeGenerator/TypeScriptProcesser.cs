@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using BanBrick.TypeScript.CodeGenerator.Models;
 using BanBrick.TypeScript.CodeGenerator.Enums;
+using BanBrick.TypeScript.CodeGenerator.Annotations;
 
 namespace BanBrick.TypeScript.CodeGenerator
 {
@@ -27,6 +28,7 @@ namespace BanBrick.TypeScript.CodeGenerator
             var valueConvertor = new ValueConvertor(typeDefinitions, nameConvertor);
 
             var classGenerator = new ClassCodeGenerator(nameConvertor, valueConvertor);
+            var constGenerator = new ConstCodeGenerator(nameConvertor, valueConvertor);
             var enumGenerator = new EnumCodeGenerator(nameConvertor);
 
             var codeBuilder = new StringBuilder();
@@ -34,14 +36,20 @@ namespace BanBrick.TypeScript.CodeGenerator
             codeBuilder.Append(_assemblyHelper.GetAssemblyContent());
             codeBuilder.Append(_assemblyHelper.GetSectionSeparator("Enums"));
 
-            typeDefinitions.GetProcessingTypes(ProcessingCategory.Enum).ForEach(x =>
+            typeDefinitions.GetProcessingTypes(TypeScriptObjectType.Enum).ForEach(x =>
                 codeBuilder.AppendLine(enumGenerator.Generate(x))
             );
 
             codeBuilder.Append(_assemblyHelper.GetSectionSeparator("Classes"));
 
-            typeDefinitions.GetProcessingTypes(ProcessingCategory.Object).ForEach(x =>
+            typeDefinitions.GetProcessingTypes(TypeScriptObjectType.Class).ForEach(x =>
                 codeBuilder.AppendLine(classGenerator.Generate(x))
+            );
+
+            codeBuilder.Append(_assemblyHelper.GetSectionSeparator("Consts"));
+
+            typeDefinitions.GetProcessingTypes(TypeScriptObjectType.Const).ForEach(x =>
+                codeBuilder.AppendLine(constGenerator.Generate(x))
             );
 
             return codeBuilder.ToString();
