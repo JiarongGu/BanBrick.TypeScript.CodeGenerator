@@ -1,33 +1,30 @@
 ﻿using BanBrick.TypeScript.CodeGenerator.Convertors;
 using BanBrick.TypeScript.CodeGenerator.Generators;
 using BanBrick.TypeScript.CodeGenerator.Helpers;
-using BanBrick.TypeScript.CodeGenerator.Processers;
+using BanBrick.TypeScript.CodeGenerator.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using BanBrick.TypeScript.CodeGenerator.Models;
+using BanBrick.TypeScript.CodeGenerator.Enums;
 
 namespace BanBrick.TypeScript.CodeGenerator
 {
     public class TypeScriptProcesser
     {
-        private readonly TypeDefinitionProcesser _typeDefinitionProcesser;
-        private readonly TypeNameProcesser _typeNameProcesser;
-
         private readonly AssemblyHelper _assemblyHelper;
 
         public TypeScriptProcesser()
         {
-            _typeDefinitionProcesser = new TypeDefinitionProcesser();
-            _typeNameProcesser = new TypeNameProcesser();
-
             _assemblyHelper = new AssemblyHelper();
         }
 
         public string GenerateTypeScript(IEnumerable<Type> types) {
-            var typeDefinitions = _typeDefinitionProcesser.Process(types);
-            var namedDefinitions = _typeNameProcesser.Process(typeDefinitions);
-            var nameConvertor = new NameConvertor(namedDefinitions);
+            var typeDefinitions = types.ResolveRelations().ResolveNames();
+
+            var nameConvertor = new NameConvertor(typeDefinitions);
+
             var classGenerator = new ClassCodeGenerator(nameConvertor);
             var enumGenerator = new EnumCodeGenerator(nameConvertor);
 
@@ -36,14 +33,14 @@ namespace BanBrick.TypeScript.CodeGenerator
             codeBuilder.Append(_assemblyHelper.GetAssemblyContent());
             codeBuilder.Append(_assemblyHelper.GetSectionSeparator("Enums"));
 
-            typeDefinitions.Where(x => x.Category == Enums.ProcessingCategory.Enum).ToList().ForEach(x =>
-                codeBuilder.AppendLine(enumGenerator.Generate(x.Type))
+            typeDefinitions.GetProcessingTypes(ProcessingCategory.Enum).ForEach(x =>
+                codeBuilder.AppendLine(enumGenerator.Generate(x))
             );
 
             codeBuilder.Append(_assemblyHelper.GetSectionSeparator("Classes"));
 
-            typeDefinitions.Where(x => x.Category == Enums.ProcessingCategory.Object).ToList().ForEach(x =>
-                codeBuilder.AppendLine(classGenerator.Generate(x.Type))
+            typeDefinitions.GetProcessingTypes(ProcessingCategory.Object).ForEach(x =>
+                codeBuilder.AppendLine(classGenerator.Generate(x))
             );
 
             return codeBuilder.ToString();

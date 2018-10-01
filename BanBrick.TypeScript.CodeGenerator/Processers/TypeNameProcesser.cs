@@ -1,5 +1,4 @@
-﻿using BanBrick.TypeScript.CodeGenerator.Annotations;
-using BanBrick.TypeScript.CodeGenerator.Enums;
+﻿using BanBrick.TypeScript.CodeGenerator.Enums;
 using BanBrick.TypeScript.CodeGenerator.Extensions;
 using BanBrick.TypeScript.CodeGenerator.Models;
 using System;
