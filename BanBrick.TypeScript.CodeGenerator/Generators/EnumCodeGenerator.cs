@@ -28,7 +28,7 @@ namespace BanBrick.TypeScript.CodeGenerator.Generators
 
             var names = Enum.GetNames(enumType);
             var values = Enum.GetValues(enumType).Cast<int>().ToArray();
-            var enumName = _nameConvertor.GetTypeScriptName(enumType);
+            var enumName = _nameConvertor.GetName(enumType);
 
             // add typescript enum
             stringBuilder.AppendLine($"export enum {enumName} {{");

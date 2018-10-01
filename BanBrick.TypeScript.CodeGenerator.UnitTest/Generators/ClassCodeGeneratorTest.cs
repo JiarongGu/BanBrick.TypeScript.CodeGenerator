@@ -7,13 +7,13 @@ using Xunit;
 
 namespace BanBrick.TypeScript.CodeGenerator.UnitTest.Generators
 {
-    public class ObjectCodeGeneratorTest
+    public class ClassCodeGeneratorTest
     {
-        private readonly ObjectCodeGenerator _generator;
+        private readonly ClassCodeGenerator _generator;
 
-        public ObjectCodeGeneratorTest()
+        public ClassCodeGeneratorTest()
         {
-            _generator = new ObjectCodeGenerator();
+            _generator = new ClassCodeGenerator();
         }
 
         [Fact]

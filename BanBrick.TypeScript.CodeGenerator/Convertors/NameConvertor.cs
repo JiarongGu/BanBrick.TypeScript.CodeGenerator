@@ -22,25 +22,31 @@ namespace BanBrick.TypeScript.CodeGenerator.Convertors
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        public string GetTypeScriptName(Type type)
+        public string GetName(Type type)
         {
             if (_typeHelper.IsPrimitiveType(type))
-                return GetPrimitiveTypeScriptName(type);
+                return GetPrimitiveName(type);
 
             if (_typeHelper.IsDictionaryType(type))
-                return GetDictionaryTypeScriptName(type);
+                return GetDictionaryName(type);
 
             if (_typeHelper.IsCollectionType(type))
-                return GetCollectionTypeScriptName(type);
+                return GetCollectionName(type);
 
-            return GetObjectTypeScriptName(type);
+            if (type.IsGenericType)
+                return GetGenericName(type);
+
+            return GetObjectName(type);
         }
 
-        public string GetObjectTypeScriptName(Type type)
+        public string GetGenericName(Type type)
         {
-            var objectType = type.IsGenericType ? type.GetGenericArguments().First() : type;
+            throw new NotImplementedException();
+        }
 
-            var name = objectType.Name;
+        public string GetObjectName(Type type)
+        {
+            var name = type.Name;
 
             var tsObjectInfo = (TypeScriptObjectAttribute)type.GetTypeInfo().GetCustomAttributes()
                 .FirstOrDefault(x => x.GetType().Name == nameof(TypeScriptObjectAttribute));
@@ -51,7 +57,7 @@ namespace BanBrick.TypeScript.CodeGenerator.Convertors
             return name;
         }
         
-        public string GetPrimitiveTypeScriptName(Type type)
+        public string GetPrimitiveName(Type type)
         {
             var primitiveType = type;
 
@@ -72,19 +78,19 @@ namespace BanBrick.TypeScript.CodeGenerator.Convertors
             return "any";
         }
 
-        public string GetDictionaryTypeScriptName(Type type)
+        public string GetDictionaryName(Type type)
         {
             var keyValuetypes = type.GenericTypeArguments;
             var keyType = keyValuetypes[0];
             var valueType = keyValuetypes[1];
 
-            return $"{{ [key: {GetTypeScriptName(keyType)}] : {GetTypeScriptName(valueType)} }}";
+            return $"{{ [key: {GetName(keyType)}] : {GetName(valueType)} }}";
         }
 
-        public string GetCollectionTypeScriptName(Type type)
+        public string GetCollectionName(Type type)
         {
             var collectionType = type.IsArray ? type.GetElementType() : type.GenericTypeArguments.First();
-            return $"{GetTypeScriptName(collectionType)}[]";
+            return $"{GetName(collectionType)}[]";
         }
     }
 }

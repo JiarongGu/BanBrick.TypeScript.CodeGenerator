@@ -9,7 +9,7 @@ using Xunit;
 
 namespace BanBrick.TypeScript.CodeGenerator.UnitTest.Generators
 {
-    public class ManagedTypeGeneratorTest
+    public class TypeDefinitionGeneratorTest
     {
         [Fact]
         public void Get_Should_ReturnAllTypes()

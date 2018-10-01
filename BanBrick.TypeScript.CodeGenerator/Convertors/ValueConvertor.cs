@@ -30,7 +30,7 @@ namespace BanBrick.TypeScript.CodeGenerator.Convertors
         /// <param name="type"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public string GenerateValueCode(Type type, object value)
+        public string GetValueCode(Type type, object value)
         {
             var typeCategory = _typeHelper.GetProcessingCategory(type);
 
@@ -44,7 +44,7 @@ namespace BanBrick.TypeScript.CodeGenerator.Convertors
 
             if (typeCategory == ProcessingCategory.Enum)
             {
-                return GetEnumValueCode(_nameConvertor.GetTypeScriptName(type), value);
+                return GetEnumValueCode(_nameConvertor.GetName(type), value);
             }
 
             if (typeCategory == ProcessingCategory.Collection)
@@ -96,7 +96,7 @@ namespace BanBrick.TypeScript.CodeGenerator.Convertors
 
             foreach (var arrayValue in arrayValues)
             {
-                arrayValuesCode.Add(GenerateValueCode(arrayValue.GetType(), arrayValue));
+                arrayValuesCode.Add(GetValueCode(arrayValue.GetType(), arrayValue));
             }
 
             return $"[ {string.Join(", ", arrayValuesCode)} ]";
@@ -116,7 +116,7 @@ namespace BanBrick.TypeScript.CodeGenerator.Convertors
                 var keyType = key.GetType();
                 var keyValueType = keyValue.GetType();
 
-                dictionaryValuesCode.Add($"{GenerateValueCode(keyType, key)}: {GenerateValueCode(keyValueType, keyValue)}");
+                dictionaryValuesCode.Add($"{GetValueCode(keyType, key)}: {GetValueCode(keyValueType, keyValue)}");
             }
 
             return $"{{ {string.Join(", ", dictionaryValuesCode)} }}";
@@ -137,8 +137,8 @@ namespace BanBrick.TypeScript.CodeGenerator.Convertors
                     continue;
 
                 var propertyType = property.PropertyType;
-                var propertyName = _nameConvertor.GetTypeScriptName(propertyType);
-                var valueCode = GenerateValueCode(propertyType, property.GetValue(value));
+                var propertyName = _nameConvertor.GetName(propertyType);
+                var valueCode = GetValueCode(propertyType, property.GetValue(value));
 
                 objectPropertiesCode.Add($"{_stringHelper.ToCamelCase(property.Name)}: {valueCode}");
             }

@@ -16,25 +16,25 @@ namespace BanBrick.TypeScript.CodeGenerator.UnitTest.Convertors
         }
 
         [Fact]
-        public void GetObjectTypeScriptName_ShouldReturnCorrect()
+        public void GetObjectName_ShouldReturnCorrect()
         {
 
         }
 
         [Fact]
-        public void GetPrimitiveTypeScriptName_ShouldReturnCorrect()
+        public void GetPrimitiveName_ShouldReturnCorrect()
         {
 
         }
 
         [Fact]
-        public void GetDictionaryTypeScriptName_ShouldReturnCorrect()
+        public void GetDictionaryName_ShouldReturnCorrect()
         {
 
         }
 
         [Fact]
-        public void GetCollectionTypeScriptName_ShouldReturnCorrect()
+        public void GetCollectionName_ShouldReturnCorrect()
         {
 
         }

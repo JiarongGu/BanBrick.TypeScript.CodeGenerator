@@ -65,16 +65,16 @@ namespace BanBrick.TypeScript.CodeGenerator.UnitTest.Convertors
         
 
         [Fact]
-        public void GenerateValueCode_ShouldReturnNumberArrayCode()
+        public void GetValueCode_ShouldReturnNumberArrayCode()
         {
             var numberList = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-            var numberListCode = _convertor.GenerateValueCode(numberList.GetType(), numberList);
+            var numberListCode = _convertor.GetValueCode(numberList.GetType(), numberList);
 
             Assert.Equal("[ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ]", numberListCode);
         }
 
         [Fact]
-        public void GenerateValueCode_ShouldReturnNumberDictionaryCode()
+        public void GetValueCode_ShouldReturnNumberDictionaryCode()
         {
             var numberDisctionary = new Dictionary<int, string>() {
                 { 1, "1" },
@@ -83,7 +83,7 @@ namespace BanBrick.TypeScript.CodeGenerator.UnitTest.Convertors
                 { 4, "4" },
                 { 5, "5" },
             };
-            var numberListCode = _convertor.GenerateValueCode(numberDisctionary.GetType(), numberDisctionary);
+            var numberListCode = _convertor.GetValueCode(numberDisctionary.GetType(), numberDisctionary);
             Assert.Equal("{ 1: '1', 2: '2', 3: '3', 4: '4', 5: '5' }", numberListCode);
         }
     }

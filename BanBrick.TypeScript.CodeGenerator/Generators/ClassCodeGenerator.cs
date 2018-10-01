@@ -9,7 +9,7 @@ using System.Text;
 
 namespace BanBrick.TypeScript.CodeGenerator.Generators
 {
-    public class ObjectCodeGenerator
+    public class ClassCodeGenerator
     {
         private readonly TypeHelper _typeHelper;
         private readonly StringHelper _stringHelper;
@@ -18,7 +18,7 @@ namespace BanBrick.TypeScript.CodeGenerator.Generators
         private readonly ValueConvertor _valueConvertor;
         private readonly NameConvertor _nameConvertor;
 
-        public ObjectCodeGenerator()
+        public ClassCodeGenerator()
         {
             _typeHelper = new TypeHelper();
             _stringHelper = new StringHelper();
@@ -39,7 +39,7 @@ namespace BanBrick.TypeScript.CodeGenerator.Generators
 
             var stringBuilder = new StringBuilder();
 
-            var typeScriptType = _nameConvertor.GetTypeScriptName(objectType);
+            var typeScriptType = _nameConvertor.GetName(objectType);
             
             stringBuilder.AppendLine($"export class {typeScriptType} {{");
             stringBuilder.AppendLine("  constructor(");
@@ -60,10 +60,10 @@ namespace BanBrick.TypeScript.CodeGenerator.Generators
                     continue;
 
                 var propertyType = property.PropertyType;
-                var propertyName = _nameConvertor.GetTypeScriptName(propertyType);
+                var propertyName = _nameConvertor.GetName(propertyType);
                 var propertyValue = instance == null ? null : property.GetValue(instance);
 
-                var valueCode = _valueConvertor.GenerateValueCode(propertyType, propertyValue);
+                var valueCode = _valueConvertor.GetValueCode(propertyType, propertyValue);
                 
                 var noValueCode = string.IsNullOrEmpty(valueCode);
 

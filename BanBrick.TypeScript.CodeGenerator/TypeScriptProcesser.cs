@@ -11,7 +11,7 @@ namespace BanBrick.TypeScript.CodeGenerator
     {
         private readonly TypeDefinitionGenerator _typeDefinitionGenerator;
 
-        private readonly ObjectCodeGenerator _objectGenerator;
+        private readonly ClassCodeGenerator _objectGenerator;
         private readonly EnumCodeGenerator _enumGenerator;
 
         private readonly AssemblyHelper _assemblyHelper;
@@ -20,7 +20,7 @@ namespace BanBrick.TypeScript.CodeGenerator
         {
             _typeDefinitionGenerator = new TypeDefinitionGenerator();
 
-            _objectGenerator = new ObjectCodeGenerator();
+            _objectGenerator = new ClassCodeGenerator();
             _enumGenerator = new EnumCodeGenerator();
 
             _assemblyHelper = new AssemblyHelper();
