@@ -5,7 +5,7 @@ C# to TypeScript Code Generator Libarary for WebApi Request/Response Model
 
 https://www.nuget.org/packages/BanBrick.TypeScript.CodeGenerator/
 
-PM > Install-Package BanBrick.TypeScript.CodeGenerator -Version 1.0.3
+PM > Install-Package BanBrick.TypeScript.CodeGenerator -Version 1.1.*
 
 
 ### Prerequisites
@@ -29,7 +29,7 @@ var code = codeProcesser.GenerateTypeScript(types);
 
 ## Roadmap
 
-- [ ] Generate const value output instead of class
+- [x] Generate const value output instead of class
 - [ ] Auto-Indenting to multiple-layered tree structure values
 - [ ] Support for Generictypes generation
 - [ ] Support for Interface generation
