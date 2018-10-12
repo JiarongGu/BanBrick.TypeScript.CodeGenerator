@@ -12,6 +12,7 @@ namespace BanBrick.TypeScript.CodeGenerator.Enums
         Primitive,
         Enum,
         Generic,
-        Object
+        Object,
+        Interface
     }
 }

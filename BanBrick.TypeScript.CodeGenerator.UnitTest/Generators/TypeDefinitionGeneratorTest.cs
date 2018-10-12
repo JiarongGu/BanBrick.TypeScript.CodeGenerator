@@ -27,7 +27,8 @@ namespace BanBrick.TypeScript.CodeGenerator.UnitTest.Generators
 
             Assert.Equal(disitinctTypes.Count(), processedTypes.Count);
             Assert.Equal(2, processedTypes.Where(x => x.Category == ProcessingCategory.Enum).Count());
-            Assert.Equal(7, processedTypes.Where(x => x.Category == ProcessingCategory.Object).Count());
+            Assert.Equal(5, processedTypes.Where(x => x.Category == ProcessingCategory.Object).Count());
+            Assert.Equal(2, processedTypes.Where(x => x.Category == ProcessingCategory.Interface).Count());
         }
     }
 }

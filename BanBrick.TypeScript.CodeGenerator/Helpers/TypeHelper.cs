@@ -122,6 +122,9 @@ namespace BanBrick.TypeScript.CodeGenerator.Helpers
             if (type.IsGenericType)
                 return ProcessingCategory.Generic;
 
+            if (type.IsInterface)
+                return ProcessingCategory.Interface;
+
             return ProcessingCategory.Object;
         }
 
@@ -161,6 +164,8 @@ namespace BanBrick.TypeScript.CodeGenerator.Helpers
                         return TypeScriptObjectType.Enum;
                     case ProcessingCategory.Object:
                         return TypeScriptObjectType.Class;
+                    case ProcessingCategory.Interface:
+                        return TypeScriptObjectType.Interface;
                     default:
                         return TypeScriptObjectType.Default;
                 }

@@ -27,12 +27,19 @@ var codeProcesser = new TypeScriptProcesser();
 var code = codeProcesser.GenerateTypeScript(types);
 ```
 
+#### Generate typescript types from annotation configs.
+
+current support typescript enum, interface, class, count generation using annotation
+
+
 ## Roadmap
 
 - [x] Generate const value output instead of class
-- [ ] Auto-Indenting to multiple-layered tree structure values
+- [x] Support for Interface generation
+- [x] Auto-Indenting to multiple-layered tree structure values
 - [ ] Support for Generictypes generation
-- [ ] Support for Interface generation
+- [ ] Support for Inherit of Generation Types
+- [ ] Auto-Indenting to multiple-layered tree structure types
 
 
 

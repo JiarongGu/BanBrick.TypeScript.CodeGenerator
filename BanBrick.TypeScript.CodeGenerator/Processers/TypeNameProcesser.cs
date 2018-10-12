@@ -56,6 +56,11 @@ namespace BanBrick.TypeScript.CodeGenerator.Processers
                     processingDefinition.Name = type.GetTypeScriptName();
                 }
 
+                if (category == ProcessingCategory.Interface)
+                {
+                    processingDefinition.Name = type.GetTypeScriptName();
+                }
+
                 if (category == ProcessingCategory.Generic)
                 {
                     var genericTypes = type.GetGenericArguments();
@@ -65,6 +70,7 @@ namespace BanBrick.TypeScript.CodeGenerator.Processers
                         processingDefinition.Name = $"{type.GetTypeScriptName()}<{string.Join(", ", genericNames)}>";
                     }
                 }
+
 
                 // if cannot process add to last of queue else add to completed list
                 if (processingDefinition.Name == null)

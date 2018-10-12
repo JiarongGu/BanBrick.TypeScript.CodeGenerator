@@ -30,6 +30,7 @@ namespace BanBrick.TypeScript.CodeGenerator
             var classGenerator = new ClassCodeGenerator(nameConvertor, valueConvertor);
             var constGenerator = new ConstCodeGenerator(nameConvertor, valueConvertor);
             var enumGenerator = new EnumCodeGenerator(nameConvertor);
+            var interfaceGenerator = new InterfaceCodeGenerator(nameConvertor);
 
             var codeBuilder = new StringBuilder();
 
@@ -40,6 +41,12 @@ namespace BanBrick.TypeScript.CodeGenerator
                 codeBuilder.AppendLine(enumGenerator.Generate(x))
             );
 
+            codeBuilder.Append(_assemblyHelper.GetSectionSeparator("Interfaces"));
+
+            typeDefinitions.GetProcessingTypes(TypeScriptObjectType.Interface).ForEach(x =>
+                codeBuilder.AppendLine(interfaceGenerator.Generate(x))
+            );
+            
             codeBuilder.Append(_assemblyHelper.GetSectionSeparator("Classes"));
 
             typeDefinitions.GetProcessingTypes(TypeScriptObjectType.Class).ForEach(x =>

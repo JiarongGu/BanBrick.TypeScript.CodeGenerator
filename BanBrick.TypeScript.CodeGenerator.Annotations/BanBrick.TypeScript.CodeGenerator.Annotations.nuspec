@@ -2,14 +2,13 @@
 <package >
   <metadata>
     <id>BanBrick.TypeScript.CodeGenerator.Annotations</id>
-    <version>1.1.2</version>
+    <version>1.1.3</version>
     <authors>jiarong.gu</authors>
     <owners>jiarong.gu</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Annotations Liabrary for BanBrick.TypeScript.CodeGenerator</description>
     <releaseNotes>
-      1. Added TypeScript Property Attubite
-      2. Added TypeScript Type for Object Attibute
+      1. Added TypeScript Object Inherit for generation type
     </releaseNotes>
     <copyright>Copyright 2018</copyright>
     <projectUrl>https://github.com/JiarongGu/BanBrick.TypeScript.CodeGenerator</projectUrl>

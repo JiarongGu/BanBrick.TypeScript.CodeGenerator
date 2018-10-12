@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BanBrick.TypeScript.CodeGenerator.Annotations\BanBrick.TypeScript.CodeGenerator.Annotations.csproj" />
     <ProjectReference Include="..\BanBrick.TypeScript.CodeGenerator\BanBrick.TypeScript.CodeGenerator.csproj" />
   </ItemGroup>
 
