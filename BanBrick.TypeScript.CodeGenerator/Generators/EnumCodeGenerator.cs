@@ -7,7 +7,7 @@ using System.Text;
 
 namespace BanBrick.TypeScript.CodeGenerator.Generators
 {
-    internal sealed class EnumCodeGenerator
+    internal sealed class EnumCodeGenerator : ICodeGenerator
     {
         private readonly INameConvertor _nameConvertor;
 

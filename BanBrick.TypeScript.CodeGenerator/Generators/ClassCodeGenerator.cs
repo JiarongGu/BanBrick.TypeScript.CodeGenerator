@@ -12,7 +12,7 @@ using System.Text;
 
 namespace BanBrick.TypeScript.CodeGenerator.Generators
 {
-    internal class ClassCodeGenerator
+    internal class ClassCodeGenerator: ICodeGenerator
     {
         private readonly TypeHelper _typeHelper;
         private readonly PropertyHelper _propertyHelper;
@@ -46,7 +46,7 @@ namespace BanBrick.TypeScript.CodeGenerator.Generators
                 instance = Activator.CreateInstance(type);
             }
 
-            var properties = TypeExtensions.GetProperties(type);
+            var properties = TypeExtensions.GetProperties(type).ToList().OrderBy(x => x.Name);
 
             foreach (var property in properties)
             {

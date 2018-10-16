@@ -8,7 +8,7 @@ using System.Text;
 
 namespace BanBrick.TypeScript.CodeGenerator.Generators
 {
-    internal class ConstCodeGenerator
+    internal class ConstCodeGenerator : ICodeGenerator
     {
         private readonly TypeHelper _typeHelper;
         private readonly PropertyHelper _propertyHelper;

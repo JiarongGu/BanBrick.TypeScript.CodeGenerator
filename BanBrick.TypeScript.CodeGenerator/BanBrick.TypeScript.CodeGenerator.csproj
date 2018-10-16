@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <PackageReference Include="BanBrick.TypeScript.CodeGenerator.Annotations" Version="1.1.3" />
+    <PackageReference Include="PluralizeService.Core" Version="1.0.0.5" />
     <PackageReference Include="System.Reflection.TypeExtensions" Version="4.5.1" />
   </ItemGroup>
 </Project>

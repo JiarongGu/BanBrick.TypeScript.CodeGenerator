@@ -20,7 +20,12 @@ namespace BanBrick.TypeScript.CodeGenerator.Extensions
         {
             return new TypeNameProcesser().Process(typeDefinitions);
         }
-        
+
+        public static IEnumerable<TypeDefinition> ResolveDuplications(this IEnumerable<TypeDefinition> typeDefinitions)
+        {
+            return new TypeDuplicationProcesser().Process(typeDefinitions);
+        }
+
         public static List<Type> GetProcessingTypes(this IEnumerable<TypeDefinition> typeDefinitions, TypeScriptObjectType processingType)
         {
             return typeDefinitions.Where(x => x.ProcessType == processingType).Select(x => x.Type).ToList();

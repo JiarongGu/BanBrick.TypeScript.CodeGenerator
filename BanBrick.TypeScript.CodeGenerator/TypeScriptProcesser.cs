@@ -9,6 +9,9 @@ using System.Text;
 using BanBrick.TypeScript.CodeGenerator.Models;
 using BanBrick.TypeScript.CodeGenerator.Enums;
 using BanBrick.TypeScript.CodeGenerator.Annotations;
+using PluralizationService;
+using PluralizationService.English;
+using System.Globalization;
 
 namespace BanBrick.TypeScript.CodeGenerator
 {
@@ -22,42 +25,41 @@ namespace BanBrick.TypeScript.CodeGenerator
         }
 
         public string GenerateTypeScript(IEnumerable<Type> types) {
-            var typeDefinitions = types.ResolveRelations().ResolveNames();
-            
+            var typeDefinitions = types
+                .ResolveRelations()
+                .ResolveNames()
+                .ResolveDuplications();
+
+            var processDefinitions = typeDefinitions.Where(x => !x.NoGeneration);
+
             var nameConvertor = new NameConvertor(typeDefinitions);
             var valueConvertor = new ValueConvertor(typeDefinitions, nameConvertor);
 
-            var classGenerator = new ClassCodeGenerator(nameConvertor, valueConvertor);
-            var constGenerator = new ConstCodeGenerator(nameConvertor, valueConvertor);
-            var enumGenerator = new EnumCodeGenerator(nameConvertor);
-            var interfaceGenerator = new InterfaceCodeGenerator(nameConvertor);
-
+            var codeGeneratorFactory = new CodeGeneratorFactory(nameConvertor, valueConvertor);
             var codeBuilder = new StringBuilder();
 
+            var pluralizationBuilder = new PluralizationApiBuilder();
+            pluralizationBuilder.AddEnglishProvider();
+
+            var pluralizationApi = pluralizationBuilder.Build();
+            var cultureInfo = new CultureInfo("en-US");
+
             codeBuilder.Append(_assemblyHelper.GetAssemblyContent());
-            codeBuilder.Append(_assemblyHelper.GetSectionSeparator("Enums"));
 
-            typeDefinitions.GetProcessingTypes(TypeScriptObjectType.Enum).ForEach(x =>
-                codeBuilder.AppendLine(enumGenerator.Generate(x))
-            );
+            Enum.GetValues(typeof(TypeScriptObjectType)).Cast<TypeScriptObjectType>().ToList()
+                .ForEach(x =>
+                {
+                    var codeGenerator = codeGeneratorFactory.GetInstance(x);
+                    if (codeGenerator != null)
+                    {
+                        var sectionName = pluralizationApi.Pluralize(x.ToString(), cultureInfo);
+                        codeBuilder.Append(_assemblyHelper.GetSectionSeparator(sectionName));
 
-            codeBuilder.Append(_assemblyHelper.GetSectionSeparator("Interfaces"));
-
-            typeDefinitions.GetProcessingTypes(TypeScriptObjectType.Interface).ForEach(x =>
-                codeBuilder.AppendLine(interfaceGenerator.Generate(x))
-            );
-            
-            codeBuilder.Append(_assemblyHelper.GetSectionSeparator("Classes"));
-
-            typeDefinitions.GetProcessingTypes(TypeScriptObjectType.Class).ForEach(x =>
-                codeBuilder.AppendLine(classGenerator.Generate(x))
-            );
-
-            codeBuilder.Append(_assemblyHelper.GetSectionSeparator("Consts"));
-
-            typeDefinitions.GetProcessingTypes(TypeScriptObjectType.Const).ForEach(x =>
-                codeBuilder.AppendLine(constGenerator.Generate(x))
-            );
+                        processDefinitions.GetProcessingTypes(x).ForEach(t =>
+                            codeBuilder.AppendLine(codeGenerator.Generate(t))
+                        );
+                    }
+                });
 
             return codeBuilder.ToString();
         }

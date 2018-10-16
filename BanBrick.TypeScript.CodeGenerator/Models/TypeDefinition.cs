@@ -21,5 +21,7 @@ namespace BanBrick.TypeScript.CodeGenerator.Models
         public bool IsNullable { get; set; }
 
         public bool IsNumeric { get; set; }
+
+        public bool NoGeneration { get; set; }
     }
 }
