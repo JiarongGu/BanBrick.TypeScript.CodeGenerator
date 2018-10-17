@@ -45,4 +45,4 @@ current support typescript enum, interface, class, count generation using annota
 
 
 ## Code Generation Workflow
-![alt text](/Code%20Generation%20Work%20Flow.png)
+![alt text](/Code%20Generation%20Work%20Flow%20v3.png)
