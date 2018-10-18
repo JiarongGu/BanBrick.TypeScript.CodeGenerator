@@ -1,7 +1,7 @@
 ﻿using BanBrick.TypeScript.CodeGenerator.Annotations;
 using BanBrick.TypeScript.CodeGenerator.Enums;
 using BanBrick.TypeScript.CodeGenerator.Models;
-using BanBrick.TypeScript.CodeGenerator.Processers;
+using BanBrick.TypeScript.CodeGenerator.Resolvers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,22 +13,27 @@ namespace BanBrick.TypeScript.CodeGenerator.Extensions
     {
         public static IEnumerable<TypeDefinition> ResolveRelations(this IEnumerable<Type> types)
         {
-            return new TypeDefinitionProcesser().Process(types);
+            return new RelationResolver().Resolve(types);
         }
 
         public static IEnumerable<TypeDefinition> ResolveNames(this IEnumerable<TypeDefinition> typeDefinitions)
         {
-            return new TypeNameProcesser().Process(typeDefinitions);
+            return new NameResolver().Resolve(typeDefinitions);
         }
 
         public static IEnumerable<TypeDefinition> ResolveDuplications(this IEnumerable<TypeDefinition> typeDefinitions)
         {
-            return new TypeDuplicationProcesser().Process(typeDefinitions);
+            return new DuplicationResolver().Resolve(typeDefinitions);
         }
 
-        public static List<Type> GetProcessingTypes(this IEnumerable<TypeDefinition> typeDefinitions, TypeScriptObjectType processingType)
+        public static IEnumerable<TypeDefinition> ResolveConfigs(this IEnumerable<TypeDefinition> typeDefinitions)
         {
-            return typeDefinitions.Where(x => x.ProcessType == processingType).Select(x => x.Type).ToList();
+            return new ConfigResolver().Resolve(typeDefinitions);
+        }
+
+        public static List<Type> GetProcessingTypes(this IEnumerable<TypeDefinition> typeDefinitions, OutputType outputType)
+        {
+            return typeDefinitions.Where(x => x.ProcessConfig.OutputType == outputType).Select(x => x.Type).ToList();
         }
     }
 }

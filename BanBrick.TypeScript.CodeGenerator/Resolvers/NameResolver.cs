@@ -7,29 +7,30 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace BanBrick.TypeScript.CodeGenerator.Processers
+namespace BanBrick.TypeScript.CodeGenerator.Resolvers
 {
-    internal class TypeNameProcesser
+    internal class NameResolver
     {
-        public IEnumerable<TypeDefinition> Process(IEnumerable<TypeDefinition> definitions)
+        public IEnumerable<TypeDefinition> Resolve(IEnumerable<TypeDefinition> definitions)
         {
-            var unprocessedDefinition = definitions.ToList();
+            var unprocessedDefinitions = definitions.ToList();
             var processedDefinitions = new List<TypeDefinition>();
 
-            while (unprocessedDefinition.Any())
+            while (unprocessedDefinitions.Any())
             {
                 // pop first type
-                var processingDefinition = unprocessedDefinition.First();
-                unprocessedDefinition.RemoveAt(0);
+                var processingDefinition = unprocessedDefinitions.First();
+                unprocessedDefinitions.RemoveAt(0);
 
                 var type = processingDefinition.Type;
-                var category = processingDefinition.Category;
+                var processConfig = processingDefinition.ProcessConfig;
+                var category = processingDefinition.ProcessingCategory;
 
                 if (category == ProcessingCategory.Primitive)
-                    processingDefinition.Name = GetPrimitiveName(processingDefinition);
+                    processConfig.Name = GetPrimitiveName(processingDefinition);
 
                 if (category == ProcessingCategory.Enum)
-                    processingDefinition.Name = type.GetTypeScriptName();
+                    processConfig.Name = GetDefaultName(processConfig, type);
 
                 if (category == ProcessingCategory.Dictionary)
                 {
@@ -38,7 +39,7 @@ namespace BanBrick.TypeScript.CodeGenerator.Processers
                     {
                         var keyName = $"[key: {GetName(processedDefinitions, key)}]";
                         var valueName = $"{GetName(processedDefinitions, value)}";
-                        processingDefinition.Name = $"{{ {keyName} : {valueName} }}";
+                        processConfig.Name = $"{{ {keyName} : {valueName} }}";
                     }
                 }
 
@@ -47,18 +48,18 @@ namespace BanBrick.TypeScript.CodeGenerator.Processers
                     var value = type.GetCollectionType();
                     if (TypeDefinitionContains(processedDefinitions, value))
                     {
-                        processingDefinition.Name = $"{GetName(processedDefinitions, value)}[]";
+                        processConfig.Name = $"{GetName(processedDefinitions, value)}[]";
                     }
                 }
 
                 if (category == ProcessingCategory.Object)
                 {
-                    processingDefinition.Name = type.GetTypeScriptName();
+                    processConfig.Name = GetDefaultName(processConfig, type);
                 }
 
                 if (category == ProcessingCategory.Interface)
                 {
-                    processingDefinition.Name = type.GetTypeScriptName();
+                    processConfig.Name = GetDefaultName(processConfig, type);
                 }
 
                 if (category == ProcessingCategory.Generic)
@@ -67,15 +68,15 @@ namespace BanBrick.TypeScript.CodeGenerator.Processers
                     if (TypeDefinitionContains(processedDefinitions, genericTypes))
                     {
                         var genericNames = genericTypes.Select(x => GetName(processedDefinitions, x));
-                        processingDefinition.Name = $"{type.GetTypeScriptName()}<{string.Join(", ", genericNames)}>";
+                        processConfig.Name = $"{GetDefaultName(processConfig, type)}<{string.Join(", ", genericNames)}>";
                     }
                 }
 
 
                 // if cannot process add to last of queue else add to completed list
-                if (processingDefinition.Name == null)
+                if (processingDefinition.ProcessConfig.Name == null)
                 {
-                    unprocessedDefinition.Add(processingDefinition);
+                    unprocessedDefinitions.Add(processingDefinition);
                 }
                 else
                 {
@@ -86,9 +87,16 @@ namespace BanBrick.TypeScript.CodeGenerator.Processers
             return processedDefinitions;
         }
 
+        private string GetDefaultName(ProcessConfig processConfig, Type type) {
+            var typeName = type.Name;
+            var genericCharIndex = typeName.IndexOf('`');
+
+            return processConfig.Name ?? (genericCharIndex > 0 ? typeName.Substring(0, genericCharIndex) : typeName);
+        }
+
         private string GetName(IEnumerable<TypeDefinition> typeDefinitions, Type type)
         {
-            return typeDefinitions.First(x => x.Type == type).Name;
+            return typeDefinitions.First(x => x.Type == type).ProcessConfig.Name;
         }
 
         private bool TypeDefinitionContains(IEnumerable<TypeDefinition> typeDefinitions, params Type[] types)

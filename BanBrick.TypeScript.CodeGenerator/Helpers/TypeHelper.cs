@@ -1,5 +1,6 @@
 ﻿using BanBrick.TypeScript.CodeGenerator.Annotations;
 using BanBrick.TypeScript.CodeGenerator.Enums;
+using BanBrick.TypeScript.CodeGenerator.Extensions;
 using BanBrick.TypeScript.CodeGenerator.Models;
 using System;
 using System.Collections.Generic;
@@ -147,10 +148,9 @@ namespace BanBrick.TypeScript.CodeGenerator.Helpers
             {
                 Type = type,
                 ActualType = actualType,
-                Category = category,
+                ProcessingCategory = category,
                 IsNullable = nullable,
-                IsNumeric = IsNumericType(type),
-                ProcessType = GetProcessType(type, category)
+                IsNumeric = IsNumericType(type)
             };
         }
 

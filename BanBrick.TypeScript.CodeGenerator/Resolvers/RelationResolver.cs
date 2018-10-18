@@ -9,22 +9,21 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace BanBrick.TypeScript.CodeGenerator.Processers
+namespace BanBrick.TypeScript.CodeGenerator.Resolvers
 {
-    internal class TypeDefinitionProcesser
+    internal class RelationResolver
     {
         private readonly TypeHelper _typeHelper;
-        private readonly PropertyHelper _propertyHelper;
 
-        public TypeDefinitionProcesser() {
+        public RelationResolver() {
             _typeHelper = new TypeHelper();
-            _propertyHelper = new PropertyHelper();
         }
 
-        public ICollection<TypeDefinition> Process(IEnumerable<Type> types) {
+        public ICollection<TypeDefinition> Resolve(IEnumerable<Type> types)
+        {
             var unProcessedTypes = types.ToList();
             var typeDefinitions = new List<TypeDefinition>();
-            
+
             while (unProcessedTypes.Any())
             {
                 // pop last type
@@ -37,12 +36,18 @@ namespace BanBrick.TypeScript.CodeGenerator.Processers
 
                 // add type to category types
                 var processingTypeCategory = _typeHelper.GetProcessingCategory(processingType);
-                typeDefinitions.Add(_typeHelper.ToTypeDefinition(processingType));
+                var currentDefinition = _typeHelper.ToTypeDefinition(processingType);
+
+                object instance = null;
+
+                // create new instance if type contains parameterless constractor
+                if (processingType.GetConstructor(Type.EmptyTypes) != null)
+                    instance = Activator.CreateInstance(processingType);
 
                 // process all properties
                 foreach (var property in TypeExtensions.GetProperties(processingType))
                 {
-                    if (_propertyHelper.IsTypeScriptIgnored(property))
+                    if (property.IsTypeScriptIgnored())
                         continue;
 
                     var propertyType = property.PropertyType;
@@ -64,7 +69,20 @@ namespace BanBrick.TypeScript.CodeGenerator.Processers
                             unProcessedTypes.AddRange(propertyType.GetGenericArguments());
                             break;
                     }
+                    
+                    currentDefinition.Properties.Add(new PropertyDefinition()
+                    {
+                        PropertyInfo = property,
+                        Type = propertyType,
+                        IsNullable = _typeHelper.IsNullable(propertyType),
+                        DefaultValue = property.TryGetValue(instance)
+                    });
                 }
+
+                if (types.Contains(currentDefinition.Type))
+                    currentDefinition.IsFirstLevel = true;
+
+                typeDefinitions.Add(currentDefinition);
             }
 
             return typeDefinitions;

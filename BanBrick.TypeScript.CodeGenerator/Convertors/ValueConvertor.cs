@@ -19,13 +19,11 @@ namespace BanBrick.TypeScript.CodeGenerator.Convertors
 
     internal sealed class ValueConvertor: IValueConvertor
     {
-        private readonly PropertyHelper _propertyHelper;
         private readonly INameConvertor _nameConvertor;
         private readonly IDictionary<Type, TypeDefinition> _typeDictionary;
 
         public ValueConvertor(IEnumerable<TypeDefinition> typeDefinitions, INameConvertor nameConvertor)
         {
-            _propertyHelper = new PropertyHelper();
             _nameConvertor = nameConvertor;
             _typeDictionary = typeDefinitions.ToDictionary(x => x.Type, x => x);
         }
@@ -38,7 +36,7 @@ namespace BanBrick.TypeScript.CodeGenerator.Convertors
         /// <returns></returns>
         public string GetValue(Type type, object value, int indentation = 0)
         {
-            var category = _typeDictionary[type].Category;
+            var category = _typeDictionary[type].ProcessingCategory;
 
             if (category == ProcessingCategory.Primitive)
             {
@@ -143,7 +141,7 @@ namespace BanBrick.TypeScript.CodeGenerator.Convertors
 
             foreach (var property in properties)
             {
-                if (_propertyHelper.IsTypeScriptIgnored(property))
+                if (property.IsTypeScriptIgnored())
                     continue;
 
                 var propertyType = property.PropertyType;

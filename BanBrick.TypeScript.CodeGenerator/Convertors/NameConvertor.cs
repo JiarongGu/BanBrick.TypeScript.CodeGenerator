@@ -19,7 +19,7 @@ namespace BanBrick.TypeScript.CodeGenerator.Convertors
 
         public NameConvertor(IEnumerable<TypeDefinition> typeDefinitions)
         {
-            _nameDictionary = typeDefinitions.ToDictionary(x => x.Type, x => x.Name);
+            _nameDictionary = typeDefinitions.ToDictionary(x => x.Type, x => x.ProcessConfig.Name);
         }
 
         public string GetName(Type type)

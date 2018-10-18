@@ -1,5 +1,5 @@
 ﻿using BanBrick.TypeScript.CodeGenerator.Enums;
-using BanBrick.TypeScript.CodeGenerator.Processers;
+using BanBrick.TypeScript.CodeGenerator.Resolvers;
 using BanBrick.TypeScript.CodeGenerator.UnitTest.TestModels;
 using System;
 using System.Collections.Generic;
@@ -14,21 +14,21 @@ namespace BanBrick.TypeScript.CodeGenerator.UnitTest.Generators
         [Fact]
         public void Get_Should_ReturnAllTypes()
         {
-            var processer = new TypeDefinitionProcesser();
+            var resolver = new RelationResolver();
             var types = new List<Type>()
             {
                 typeof(TestModel1),
                 typeof(TestModel2),
                 typeof(ITestInterface1)
             }; 
-            var processedTypes = processer.Process(types);
+            var processedTypes = resolver.Resolve(types);
             var duplicatedTypes = processedTypes.Select(x => x.Type).ToList().OrderBy(x => x.Name);
             var disitinctTypes = duplicatedTypes.Distinct();
 
             Assert.Equal(disitinctTypes.Count(), processedTypes.Count);
-            Assert.Equal(2, processedTypes.Where(x => x.Category == ProcessingCategory.Enum).Count());
-            Assert.Equal(5, processedTypes.Where(x => x.Category == ProcessingCategory.Object).Count());
-            Assert.Equal(2, processedTypes.Where(x => x.Category == ProcessingCategory.Interface).Count());
+            Assert.Equal(2, processedTypes.Where(x => x.ProcessingCategory == ProcessingCategory.Enum).Count());
+            Assert.Equal(5, processedTypes.Where(x => x.ProcessingCategory == ProcessingCategory.Object).Count());
+            Assert.Equal(2, processedTypes.Where(x => x.ProcessingCategory == ProcessingCategory.Interface).Count());
         }
     }
 }

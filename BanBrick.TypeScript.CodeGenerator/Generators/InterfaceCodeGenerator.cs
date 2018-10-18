@@ -12,15 +12,11 @@ namespace BanBrick.TypeScript.CodeGenerator.Generators
     internal class InterfaceCodeGenerator : ICodeGenerator
     {
         private readonly TypeHelper _typeHelper;
-        private readonly PropertyHelper _propertyHelper;
-        
         private readonly INameConvertor _nameConvertor;
 
         public InterfaceCodeGenerator(INameConvertor nameConvertor)
         {
             _typeHelper = new TypeHelper();
-            _propertyHelper = new PropertyHelper();
-            
             _nameConvertor = nameConvertor;
         }
 
@@ -44,7 +40,7 @@ namespace BanBrick.TypeScript.CodeGenerator.Generators
 
             foreach (var property in properties)
             {
-                if (_propertyHelper.IsTypeScriptIgnored(property))
+                if (property.IsTypeScriptIgnored())
                     continue;
 
                 var propertyType = property.PropertyType;

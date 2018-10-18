@@ -27,10 +27,11 @@ namespace BanBrick.TypeScript.CodeGenerator
         public string GenerateTypeScript(IEnumerable<Type> types) {
             var typeDefinitions = types
                 .ResolveRelations()
+                .ResolveConfigs()
                 .ResolveNames()
                 .ResolveDuplications();
 
-            var processDefinitions = typeDefinitions.Where(x => !x.NoGeneration);
+            var processDefinitions = typeDefinitions.Where(x => x.ProcessConfig?.OutputType != OutputType.None);
 
             var nameConvertor = new NameConvertor(typeDefinitions);
             var valueConvertor = new ValueConvertor(typeDefinitions, nameConvertor);
@@ -46,7 +47,7 @@ namespace BanBrick.TypeScript.CodeGenerator
 
             codeBuilder.Append(_assemblyHelper.GetAssemblyContent());
 
-            Enum.GetValues(typeof(TypeScriptObjectType)).Cast<TypeScriptObjectType>().ToList()
+            Enum.GetValues(typeof(OutputType)).Cast<OutputType>().ToList()
                 .ForEach(x =>
                 {
                     var codeGenerator = codeGeneratorFactory.GetInstance(x);

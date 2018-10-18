@@ -12,16 +12,16 @@ namespace BanBrick.TypeScript.CodeGenerator.Models
 
         public Type ActualType { get; set; }
 
-        public ProcessingCategory Category { get; set; }
-
-        public TypeScriptObjectType ProcessType { get; set; }
-
-        public string Name { get; set; }
-
+        public ProcessingCategory ProcessingCategory { get; set; }
+        
+        public ProcessConfig ProcessConfig { get; set; }
+        
         public bool IsNullable { get; set; }
 
         public bool IsNumeric { get; set; }
 
-        public bool NoGeneration { get; set; }
+        public bool IsFirstLevel { get; set; }
+
+        public List<PropertyDefinition> Properties { get; set; } = new List<PropertyDefinition>();
     }
 }
