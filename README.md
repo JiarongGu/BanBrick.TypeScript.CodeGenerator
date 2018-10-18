@@ -38,9 +38,10 @@ current support typescript enum, interface, class, count generation using annota
 - [x] Support for Interface generation
 - [x] Auto-Indenting to multiple-layered tree structure values
 - [x] Support Auto-Resolve for Type Name Duplication
-- [ ] Support for Generictypes generation
-- [ ] Support for Inherit of Generation Types
+- [x] Support for Inherit of Generation Types
 - [x] Auto-Indenting to multiple-layered tree structure types
+- [ ] Support for external config instead of only annotation
+- [ ] Support for Generictypes generation
 
 
 
