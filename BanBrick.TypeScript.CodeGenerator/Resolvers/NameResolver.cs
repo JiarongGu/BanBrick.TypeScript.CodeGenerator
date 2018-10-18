@@ -111,7 +111,7 @@ namespace BanBrick.TypeScript.CodeGenerator.Resolvers
             if (typeDefinition.IsNumeric)
                 return "number";
 
-            if (type == typeof(string) || type == typeof(DateTime))
+            if (typeDefinition.IsString)
                 return "string";
 
             if (type == typeof(bool))

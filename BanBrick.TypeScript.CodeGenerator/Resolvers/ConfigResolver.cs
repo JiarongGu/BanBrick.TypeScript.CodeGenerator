@@ -1,5 +1,6 @@
 ﻿using BanBrick.TypeScript.CodeGenerator.Convertors;
 using BanBrick.TypeScript.CodeGenerator.Enums;
+using BanBrick.TypeScript.CodeGenerator.Extensions;
 using BanBrick.TypeScript.CodeGenerator.Models;
 using System;
 using System.Collections.Generic;
@@ -12,14 +13,17 @@ namespace BanBrick.TypeScript.CodeGenerator.Resolvers
     {
         public IEnumerable<TypeDefinition> Resolve(IEnumerable<TypeDefinition> definitions)
         {
-            var typeDefinitions = definitions.ToList();
-            var unprocessedDefinitions = definitions.Where(x => x.IsFirstLevel).ToList();
-            var processedDictionary = typeDefinitions.ToDictionary(x => x.Type, x => x);
+            var unprocessedDefinitions = definitions.Where(x => x.IsFirstLevel)
+                .Select(x => { x.ProcessConfig = ConfigConvertor.GetProcessConfig(x.Type); return x; })
+                .OrderBy(x => x.ProcessConfig.OutputType)
+                .ToList();
+            
+            var processedDictionary = definitions.ToDictionary(x => x.Type, x => x);
 
             while (unprocessedDefinitions.Any())
             {
-                var processingDefinition = unprocessedDefinitions.Last();
-                unprocessedDefinitions.RemoveAt(unprocessedDefinitions.Count - 1);
+                var processingDefinition = unprocessedDefinitions.First();
+                unprocessedDefinitions.RemoveAt(0);
 
                 processingDefinition.ProcessConfig = 
                     processingDefinition.ProcessConfig ?? ConfigConvertor.GetProcessConfig(processingDefinition.Type);
@@ -28,10 +32,16 @@ namespace BanBrick.TypeScript.CodeGenerator.Resolvers
                 
                 foreach (var property in processingDefinition.Properties)
                 {
-                    var propertyDefinition = typeDefinitions.First(x => x.Type == property.Type);
+                    var propertyDefinition = processedDictionary[property.Type];
 
-                    if (processingDefinition.ProcessConfig?.Inherit ?? false)
-                        propertyDefinition.ProcessConfig = processingDefinition.ProcessConfig;
+                    if (propertyDefinition.ProcessConfig == null)
+                    {
+                        if ((processingDefinition.ProcessConfig?.Inherit ?? false) && propertyDefinition.IsInheritable())
+                            propertyDefinition.ProcessConfig = new ProcessConfig() { OutputType = processingDefinition.ProcessConfig.OutputType, Inherit = true };
+
+                        if (processingDefinition.ProcessConfig?.OutputType == OutputType.Const)
+                            propertyDefinition.ProcessConfig = new ProcessConfig() { OutputType = OutputType.None, Inherit = true };
+                    }
 
                     unprocessedDefinitions.Add(propertyDefinition);
                 }

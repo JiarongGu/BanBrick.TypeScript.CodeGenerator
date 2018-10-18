@@ -61,7 +61,10 @@ namespace BanBrick.TypeScript.CodeGenerator.Resolvers
                         {
                             codeGroups[i].ToList().ForEach(x =>
                             {
-                                x.definition.ProcessConfig.Name = $"{x.definition.ProcessConfig.Name}_{i}";
+                                var name = x.definition.ProcessConfig.Name;
+                                var indexOfMarker = name.IndexOfAny(new char[]{ '[', '<'});
+                                x.definition.ProcessConfig.Name = 
+                                    indexOfMarker < 0 ? $"{name}_{i}" : $"{name.Substring(0, indexOfMarker)}_{i}{name.Substring(indexOfMarker)}";  
                             });
                         }
                     }

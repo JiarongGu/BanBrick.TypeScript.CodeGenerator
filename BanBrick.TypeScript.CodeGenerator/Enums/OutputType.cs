@@ -6,11 +6,11 @@ namespace BanBrick.TypeScript.CodeGenerator.Enums
 {
     public enum OutputType
     {
+        None,
         Default,
-        Class,
-        Const,
         Enum,
         Interface,
-        None
+        Class,
+        Const,
     }
 }

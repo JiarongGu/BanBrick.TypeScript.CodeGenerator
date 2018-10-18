@@ -96,6 +96,23 @@ namespace BanBrick.TypeScript.CodeGenerator.Helpers
             }
         }
 
+        public bool IsStringType(Type type)
+        {
+            if (type == typeof(string))
+                return true;
+
+            if (type == typeof(DateTime))
+                return true;
+
+            if (type == typeof(Guid) || type == typeof(Guid?))
+                return true;
+
+            if (type == typeof(char) || type == typeof(char?))
+                return true;
+
+            return false;
+        }
+
         public bool IsNullable(Type type)
         {
             return !type.IsValueType || IsNullAblePrimitiveType(type);
@@ -150,7 +167,8 @@ namespace BanBrick.TypeScript.CodeGenerator.Helpers
                 ActualType = actualType,
                 ProcessingCategory = category,
                 IsNullable = nullable,
-                IsNumeric = IsNumericType(type)
+                IsNumeric = IsNumericType(type),
+                IsString = IsStringType(type)
             };
         }
 
@@ -210,7 +228,7 @@ namespace BanBrick.TypeScript.CodeGenerator.Helpers
 
         private bool IsSpecialPrimitiveType(Type type)
         {
-            if (type == typeof(decimal) || type == typeof(string) || type == typeof(DateTime))
+            if (type == typeof(decimal) || IsStringType(type))
             {
                 return true;
             }

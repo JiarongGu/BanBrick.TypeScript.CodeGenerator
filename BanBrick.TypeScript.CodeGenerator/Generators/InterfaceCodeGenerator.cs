@@ -45,8 +45,6 @@ namespace BanBrick.TypeScript.CodeGenerator.Generators
 
                 var propertyType = property.PropertyType;
                 var propertyName = _nameConvertor.GetName(propertyType);
-                var propertyValue = instance == null ? null : property.GetValue(instance);
-
                 var nullableCode = _typeHelper.IsNullable(propertyType) ? "?" : "";
 
                 stringBuilder.AppendLine($"  {property.Name.ToCamelCase()}{nullableCode}: {propertyName};");

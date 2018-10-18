@@ -20,6 +20,8 @@ namespace BanBrick.TypeScript.CodeGenerator.Models
 
         public bool IsNumeric { get; set; }
 
+        public bool IsString { get; set; }
+
         public bool IsFirstLevel { get; set; }
 
         public List<PropertyDefinition> Properties { get; set; } = new List<PropertyDefinition>();

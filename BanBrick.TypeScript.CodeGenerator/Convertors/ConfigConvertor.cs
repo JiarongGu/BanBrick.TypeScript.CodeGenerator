@@ -53,7 +53,7 @@ namespace BanBrick.TypeScript.CodeGenerator.Convertors
                 case TypeScriptObjectType.Class:
                     return OutputType.Class;
                 case TypeScriptObjectType.Const:
-                    return OutputType.Class;
+                    return OutputType.Const;
                 case TypeScriptObjectType.Enum:
                     return OutputType.Enum;
                 case TypeScriptObjectType.Interface:
