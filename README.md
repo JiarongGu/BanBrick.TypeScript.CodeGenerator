@@ -31,6 +31,24 @@ var code = codeProcesser.GenerateTypeScript(types);
 
 current support typescript enum, interface, class, count generation using annotation
 
+#### Output type inherit use annotation
+
+```
+using BanBrick.TypeScript.CodeGenerator.Annotation;
+
+[TypeScriptObject(Type = TypeScriptObjectType.Interface, Inherit = true)]
+public class Request
+{
+  public RequestDetail Details { get; set; }
+}
+
+public class RequestDetail 
+{
+  public string Name { get; set; }
+}
+```
+
+this will output both Request and RequestDetail in Interface format of Typescript
 
 ## Roadmap
 
