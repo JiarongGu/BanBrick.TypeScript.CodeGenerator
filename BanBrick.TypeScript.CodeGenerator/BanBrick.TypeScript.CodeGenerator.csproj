@@ -10,6 +10,10 @@
 3. Fix config resolver not resolver inherit dependency with collection and dictionary</PackageReleaseNotes>
     <Description>C# to TypeScript Code Generator Library for .Net Core Web APIs Request/Response models</Description>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageLicenseUrl>https://github.com/JiarongGu/BanBrick.TypeScript.CodeGenerator/blob/master/LICENSE</PackageLicenseUrl>
+    <RepositoryUrl>https://github.com/JiarongGu/BanBrick.TypeScript.CodeGenerator</RepositoryUrl>
+    <RepositoryType>Github</RepositoryType>
   </PropertyGroup>
 
   <ItemGroup>
