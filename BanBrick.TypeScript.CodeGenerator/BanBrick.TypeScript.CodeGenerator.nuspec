@@ -2,13 +2,15 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
   <metadata>
     <id>BanBrick.TypeScript.CodeGenerator</id>
-    <version>1.2.3</version>
+    <version>1.2.4</version>
     <authors>jiarong.gu</authors>
     <owners>jiarong.gu</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>C# to TypeScript Code Generator Libarary for .Net Core Web APIs Request/Response models</description>
+    <description>C# to TypeScript Code Generator Library for .Net Core Web APIs Request/Response models</description>
     <releaseNotes>
-      support for type generation inherit
+      Added TimeSpan type to primitive type
+      Fix bug when inner type is same as outer type cause config resolver uncompleted
+      Fix config resolver not resolver inherit dependency with collection and dictionary
     </releaseNotes>
     <copyright>Copyright 2018</copyright>
     <projectUrl>https://github.com/JiarongGu/BanBrick.TypeScript.CodeGenerator</projectUrl>

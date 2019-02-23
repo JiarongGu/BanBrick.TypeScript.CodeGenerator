@@ -86,6 +86,15 @@ namespace BanBrick.TypeScript.CodeGenerator.Convertors
             if (type == typeof(DateTime) && ((DateTime)value).Ticks > 0 )
                 return ((DateTime)value).ToUniversalTime().ToString("o", CultureInfo.InvariantCulture).ToTypeScript();
 
+            if (type == typeof(DateTime))
+                return "''";
+
+            if (type == typeof(TimeSpan))
+                return $"{((TimeSpan)value).TotalMilliseconds}"; 
+
+            if (type == typeof(Guid))
+                return "''";
+
             return null;
         }
 

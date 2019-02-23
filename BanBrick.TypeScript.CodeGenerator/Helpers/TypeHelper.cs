@@ -77,6 +77,9 @@ namespace BanBrick.TypeScript.CodeGenerator.Helpers
 
         public bool IsNumericType(Type type)
         {
+            if (type == typeof(TimeSpan))
+                    return true;
+            
             switch (Type.GetTypeCode(type))
             {
                 case TypeCode.Byte:
@@ -232,6 +235,10 @@ namespace BanBrick.TypeScript.CodeGenerator.Helpers
             {
                 return true;
             }
+
+            if (type == typeof(TimeSpan))
+                return true;
+
             return false;
         }
     }

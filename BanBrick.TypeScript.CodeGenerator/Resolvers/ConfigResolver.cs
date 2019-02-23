@@ -29,18 +29,54 @@ namespace BanBrick.TypeScript.CodeGenerator.Resolvers
                     processingDefinition.ProcessConfig ?? ConfigConvertor.GetProcessConfig(processingDefinition.Type);
 
                 processedDictionary[processingDefinition.Type] = processingDefinition;
-                
-                foreach (var property in processingDefinition.Properties)
+
+                var innerTypes = new List<Type>();
+
+                if (processingDefinition.ProcessingCategory == ProcessingCategory.Collection)
                 {
-                    var propertyDefinition = processedDictionary[property.Type];
+                    innerTypes.Add(processingDefinition.Type.GetCollectionType());
+                }
+
+                if (processingDefinition.ProcessingCategory == ProcessingCategory.Dictionary)
+                {
+                    var dicTypes = processingDefinition.Type.GetDictionaryTypes();
+                    innerTypes.Add(dicTypes.key);
+                    innerTypes.Add(dicTypes.value);
+                }
+
+                if (processingDefinition.ProcessingCategory == ProcessingCategory.Generic)
+                {
+                    innerTypes.AddRange(processingDefinition.Type.GetGenericArguments());
+                }
+
+                if (processingDefinition.ProcessingCategory == ProcessingCategory.Object)
+                {
+                    innerTypes.AddRange(processingDefinition.Properties.Select(x => x.Type));
+                }
+
+                foreach (var innerType in innerTypes)
+                {
+                    var propertyDefinition = processedDictionary[innerType];
+
+                    // ignore property definition that's the same as processing definition
+                    if (propertyDefinition == processingDefinition)
+                        continue;
 
                     if (propertyDefinition.ProcessConfig == null)
                     {
-                        if ((processingDefinition.ProcessConfig?.Inherit ?? false) && propertyDefinition.IsInheritable())
-                            propertyDefinition.ProcessConfig = new ProcessConfig() { OutputType = processingDefinition.ProcessConfig.OutputType, Inherit = true };
+                        if (processingDefinition.ProcessConfig?.Inherit ?? false) { 
+                            propertyDefinition.ProcessConfig = new ProcessConfig() {
+                                OutputType = processingDefinition.ProcessConfig.OutputType,
+                                Inherit = true
+                            };
+                        }
 
-                        if (processingDefinition.ProcessConfig?.OutputType == OutputType.Const)
-                            propertyDefinition.ProcessConfig = new ProcessConfig() { OutputType = OutputType.None, Inherit = true };
+                        if (processingDefinition.ProcessConfig?.OutputType == OutputType.Const) { 
+                            propertyDefinition.ProcessConfig = new ProcessConfig() {
+                                OutputType = OutputType.None,
+                                Inherit = true
+                            };
+                        }
                     }
 
                     unprocessedDefinitions.Add(propertyDefinition);
@@ -48,6 +84,12 @@ namespace BanBrick.TypeScript.CodeGenerator.Resolvers
             }
 
             var processedDefinitions = processedDictionary.Select(x => x.Value);
+
+            // remove config from inherited non heritable types
+            processedDefinitions.Where(x => !x.IsInheritable() && (x.ProcessConfig?.Inherit ?? false)).ToList()
+                .ForEach(x =>
+                    x.ProcessConfig = null
+                );
 
             processedDefinitions.Where(x => x.ProcessConfig == null).ToList().ForEach(x =>
             {
