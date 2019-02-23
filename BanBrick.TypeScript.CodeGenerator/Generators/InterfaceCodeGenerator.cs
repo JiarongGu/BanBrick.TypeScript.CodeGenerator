@@ -11,12 +11,12 @@ namespace BanBrick.TypeScript.CodeGenerator.Generators
 {
     internal class InterfaceCodeGenerator : ICodeGenerator
     {
-        private readonly TypeHelper _typeHelper;
+        private readonly TypeResolver _typeHelper;
         private readonly INameConvertor _nameConvertor;
 
         public InterfaceCodeGenerator(INameConvertor nameConvertor)
         {
-            _typeHelper = new TypeHelper();
+            _typeHelper = new TypeResolver();
             _nameConvertor = nameConvertor;
         }
 

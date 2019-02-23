@@ -2,6 +2,7 @@
 using BanBrick.TypeScript.CodeGenerator.Enums;
 using BanBrick.TypeScript.CodeGenerator.Models;
 using BanBrick.TypeScript.CodeGenerator.Resolvers;
+using BanBrick.TypeScript.CodeGenerator.TypeHandlers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +12,9 @@ namespace BanBrick.TypeScript.CodeGenerator.Extensions
 {
     internal static class TypeDefinitionExtension
     {
-        public static IEnumerable<TypeDefinition> ResolveRelations(this IEnumerable<Type> types)
+        public static IEnumerable<TypeDefinition> ResolveRelations(this IEnumerable<Type> types, IDictionary<Type, ITypeHandler> typeHandlers)
         {
-            return new RelationResolver().Resolve(types);
+            return new RelationResolver(typeHandlers).Resolve(types);
         }
 
         public static IEnumerable<TypeDefinition> ResolveNames(this IEnumerable<TypeDefinition> typeDefinitions)

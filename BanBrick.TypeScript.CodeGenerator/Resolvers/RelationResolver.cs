@@ -1,22 +1,22 @@
 ﻿using BanBrick.TypeScript.CodeGenerator.Enums;
 using BanBrick.TypeScript.CodeGenerator.Extensions;
-using BanBrick.TypeScript.CodeGenerator.Helpers;
 using BanBrick.TypeScript.CodeGenerator.Models;
+using BanBrick.TypeScript.CodeGenerator.TypeHandlers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Text;
 
 namespace BanBrick.TypeScript.CodeGenerator.Resolvers
 {
     internal class RelationResolver
     {
-        private readonly TypeHelper _typeHelper;
+        private readonly TypeResolver _typeResolver;
+        private readonly IDictionary<Type, ITypeHandler> _typeHandlerMap;
 
-        public RelationResolver() {
-            _typeHelper = new TypeHelper();
+        public RelationResolver(IDictionary<Type, ITypeHandler> typeHandlerMap) {
+            _typeHandlerMap = typeHandlerMap;
+            _typeResolver = new TypeResolver(typeHandlerMap);
         }
 
         public ICollection<TypeDefinition> Resolve(IEnumerable<Type> types)
@@ -35,12 +35,12 @@ namespace BanBrick.TypeScript.CodeGenerator.Resolvers
                     continue;
 
                 // add type to category types
-                var processingTypeCategory = _typeHelper.GetProcessingCategory(processingType);
-                var currentDefinition = _typeHelper.ToTypeDefinition(processingType);
+                var processingTypeCategory = _typeResolver.GetProcessingCategory(processingType);
+                var currentDefinition = _typeResolver.ToTypeDefinition(processingType);
 
                 object instance = null;
 
-                // create new instance if type contains parameterless constractor
+                // create new instance if type contains parameterless constructor
                 if (processingType.GetConstructor(Type.EmptyTypes) != null)
                     instance = Activator.CreateInstance(processingType);
 
@@ -51,7 +51,7 @@ namespace BanBrick.TypeScript.CodeGenerator.Resolvers
                         continue;
 
                     var propertyType = property.PropertyType;
-                    var category = _typeHelper.GetProcessingCategory(propertyType);
+                    var category = _typeResolver.GetProcessingCategory(propertyType);
 
                     unProcessedTypes.Add(propertyType);
 
@@ -70,11 +70,11 @@ namespace BanBrick.TypeScript.CodeGenerator.Resolvers
                             break;
                     }
                     
-                    currentDefinition.Properties.Add(new PropertyDefinition()
+                    currentDefinition.Properties.Add( new PropertyDefinition()
                     {
                         PropertyInfo = property,
                         Type = propertyType,
-                        IsNullable = _typeHelper.IsNullable(propertyType),
+                        IsNullable = _typeResolver.IsNullable(propertyType),
                         DefaultValue = property.TryGetValue(instance)
                     });
                 }

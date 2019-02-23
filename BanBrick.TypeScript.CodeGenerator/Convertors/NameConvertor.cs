@@ -1,15 +1,11 @@
-﻿using BanBrick.TypeScript.CodeGenerator.Annotations;
-using BanBrick.TypeScript.CodeGenerator.Helpers;
-using BanBrick.TypeScript.CodeGenerator.Models;
+﻿using BanBrick.TypeScript.CodeGenerator.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 
 namespace BanBrick.TypeScript.CodeGenerator.Convertors
 {
-    internal interface INameConvertor {
+    public interface INameConvertor {
         string GetName(Type type);
     }
 

@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 
-namespace BanBrick.TypeScript.CodeGenerator.Helpers
+namespace BanBrick.TypeScript.CodeGenerator.Generators
 {
-    internal class AssemblyHelper
+    internal class AssemblyCodeGenerator
     {
         public string GetSectionSeparator(string sectionName)
         {

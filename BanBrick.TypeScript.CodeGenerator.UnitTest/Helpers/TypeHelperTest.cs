@@ -10,10 +10,10 @@ namespace BanBrick.TypeScript.CodeGenerator.UnitTest.Helpers
 {
     public class TypeHelperTest
     {
-        private readonly TypeHelper _typeHelper;
+        private readonly TypeResolver _typeHelper;
 
         public TypeHelperTest() {
-            _typeHelper = new TypeHelper();
+            _typeHelper = new TypeResolver();
         }
         
         [Fact]

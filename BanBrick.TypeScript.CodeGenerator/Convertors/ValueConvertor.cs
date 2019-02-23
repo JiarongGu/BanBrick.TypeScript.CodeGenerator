@@ -1,6 +1,5 @@
 ﻿using BanBrick.TypeScript.CodeGenerator.Enums;
 using BanBrick.TypeScript.CodeGenerator.Extensions;
-using BanBrick.TypeScript.CodeGenerator.Helpers;
 using BanBrick.TypeScript.CodeGenerator.Models;
 using System;
 using System.Collections;
@@ -8,11 +7,10 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 
 namespace BanBrick.TypeScript.CodeGenerator.Convertors
 {
-    internal interface IValueConvertor
+    public interface IValueConvertor
     {
         string GetValue(Type type, object value, int indentation = 0);
     }

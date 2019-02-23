@@ -1,11 +1,7 @@
 ﻿using BanBrick.TypeScript.CodeGenerator.Convertors;
-using BanBrick.TypeScript.CodeGenerator.Enums;
 using BanBrick.TypeScript.CodeGenerator.Extensions;
-using BanBrick.TypeScript.CodeGenerator.Helpers;
-using BanBrick.TypeScript.CodeGenerator.Models;
+using BanBrick.TypeScript.CodeGenerator.Resolvers;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -14,14 +10,14 @@ namespace BanBrick.TypeScript.CodeGenerator.Generators
 {
     internal class ClassCodeGenerator: ICodeGenerator
     {
-        private readonly TypeHelper _typeHelper;
+        private readonly TypeResolver _typeHelper;
 
         private readonly IValueConvertor _valueConvertor;
         private readonly INameConvertor _nameConvertor;
 
         public ClassCodeGenerator(INameConvertor nameConvertor, IValueConvertor valueConvertor)
         {
-            _typeHelper = new TypeHelper();
+            _typeHelper = new TypeResolver();
 
             _valueConvertor = valueConvertor;
             _nameConvertor = nameConvertor;

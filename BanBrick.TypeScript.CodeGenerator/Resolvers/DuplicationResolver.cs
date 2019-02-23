@@ -36,7 +36,7 @@ namespace BanBrick.TypeScript.CodeGenerator.Resolvers
 
                     var codeGroups = duplicateDefinitions
                         .Select(x => (
-                            code: codeGeneratorFactory.GetInstance(x.ProcessConfig.OutputType)?.Generate(x.ActualType), 
+                            code: codeGeneratorFactory.GetInstance(x.ProcessConfig.OutputType)?.Generate(x.Type), 
                             definition: x)
                         )
                         .GroupBy(x => x.code)

@@ -10,14 +10,14 @@ namespace BanBrick.TypeScript.CodeGenerator.Generators
 {
     internal class ConstCodeGenerator : ICodeGenerator
     {
-        private readonly TypeHelper _typeHelper;
+        private readonly TypeResolver _typeHelper;
 
         private readonly IValueConvertor _valueConvertor;
         private readonly INameConvertor _nameConvertor;
 
         public ConstCodeGenerator(INameConvertor nameConvertor, IValueConvertor valueConvertor)
         {
-            _typeHelper = new TypeHelper();
+            _typeHelper = new TypeResolver();
 
             _valueConvertor = valueConvertor;
             _nameConvertor = nameConvertor;
