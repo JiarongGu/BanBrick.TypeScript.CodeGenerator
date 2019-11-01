@@ -17,15 +17,18 @@ namespace BanBrick.TypeScript.CodeGenerator.Resolvers
                 .Select(x => { x.ProcessConfig = ConfigConvertor.GetProcessConfig(x.Type); return x; })
                 .OrderBy(x => x.ProcessConfig.OutputType)
                 .ToList();
-            
+
             var processedDictionary = definitions.ToDictionary(x => x.Type, x => x);
+            var processedType = new List<Type>();
 
             while (unprocessedDefinitions.Any())
             {
                 var processingDefinition = unprocessedDefinitions.First();
                 unprocessedDefinitions.RemoveAt(0);
 
-                processingDefinition.ProcessConfig = 
+                processedType.Add(processingDefinition.Type);
+
+                processingDefinition.ProcessConfig =
                     processingDefinition.ProcessConfig ?? ConfigConvertor.GetProcessConfig(processingDefinition.Type);
 
                 processedDictionary[processingDefinition.Type] = processingDefinition;
@@ -64,22 +67,29 @@ namespace BanBrick.TypeScript.CodeGenerator.Resolvers
 
                     if (propertyDefinition.ProcessConfig == null)
                     {
-                        if (processingDefinition.ProcessConfig?.Inherit ?? false) { 
-                            propertyDefinition.ProcessConfig = new ProcessConfig() {
+                        if (processingDefinition.ProcessConfig?.Inherit ?? false)
+                        {
+                            propertyDefinition.ProcessConfig = new ProcessConfig()
+                            {
                                 OutputType = processingDefinition.ProcessConfig.OutputType,
                                 Inherit = true
                             };
                         }
 
-                        if (processingDefinition.ProcessConfig?.OutputType == OutputType.Const) { 
-                            propertyDefinition.ProcessConfig = new ProcessConfig() {
+                        if (processingDefinition.ProcessConfig?.OutputType == OutputType.Const)
+                        {
+                            propertyDefinition.ProcessConfig = new ProcessConfig()
+                            {
                                 OutputType = OutputType.None,
                                 Inherit = true
                             };
                         }
                     }
 
-                    unprocessedDefinitions.Add(propertyDefinition);
+                    if (processedType.Any(x => x == propertyDefinition.Type) == false)
+                    {
+                        unprocessedDefinitions.Add(propertyDefinition);
+                    }
                 }
             }
 
